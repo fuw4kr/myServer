@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "name": "drogon",
+      "default-features": false,
+      "features": [ "orm", "postgres" ]
+    },
+    "libpq",
+    "jsoncpp"
+  ]
+}

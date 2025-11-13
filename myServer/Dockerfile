@@ -1,24 +1,24 @@
 FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
-    git cmake g++ curl unzip zip pkg-config libssl-dev libjsoncpp-dev uuid-dev zlib1g-dev libpq-dev \
+    git cmake g++ libjsoncpp-dev uuid-dev zlib1g-dev libssl-dev libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg && \
-    /opt/vcpkg/bootstrap-vcpkg.sh && \
-    /opt/vcpkg/vcpkg install drogon[core,orm,postgres]:x64-linux
-
-ENV VCPKG_ROOT=/opt/vcpkg
-ENV CMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake
+RUN git clone --recursive https://github.com/drogonframework/drogon.git /tmp/drogon && \
+    cd /tmp/drogon && mkdir build && cd build && \
+    cmake .. && make -j$(nproc) && make install
 
 WORKDIR /app
-COPY . .
+COPY . /app
 
-RUN mkdir build && cd build && \
-    cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE .. && \
-    make -j$(nproc) && \
-    ls -la
+RUN mkdir build \
+    && cd build \
+    && cmake .. \
+    && make -j$(nproc) \
+    && cp myServerApp /app/
 
-WORKDIR /app/build
+RUN chmod +x /app/myServerApp
+
 EXPOSE 8080
-CMD ["./myServerApp"]
+
+CMD ["/app/myServerApp"]

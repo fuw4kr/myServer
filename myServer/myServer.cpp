@@ -54,7 +54,6 @@ int main()
         { Get }
     );
 
-    // === Загальна функція для таблиць ===
     auto makeHandler = [db](const std::string& table, const std::string& orderBy, int limit = 20) {
         return [db, table, orderBy, limit](const HttpRequestPtr&, std::function<void(const HttpResponsePtr&)>&& cb) {
             std::string query = "SELECT * FROM " + table + " ORDER BY " + orderBy + " DESC LIMIT " + std::to_string(limit);
@@ -93,7 +92,6 @@ int main()
             };
         };
 
-    // === Окремі таблиці ===
     app().registerHandler("/api/persons", makeHandler("persons", "id"), { Get });
     app().registerHandler("/api/cameras", makeHandler("cameras", "id"), { Get });
     app().registerHandler("/api/events", makeHandler("events", "timestamp"), { Get });

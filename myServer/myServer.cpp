@@ -31,10 +31,6 @@ int main()
         }
     );
 
-    app()
-        .addListener("0.0.0.0", 8080)
-        .setThreadNum(2);
-
     // === Root endpoint ===
     app().registerHandler(
         "/",
@@ -154,7 +150,12 @@ int main()
         },
         { Get }
     );
+   
+    drogon::app()
+        .addListener("0.0.0.0", 8080)
+        .setThreadNum(2)
+        .run();
 
-    app().run();
     return 0;
+}
 }

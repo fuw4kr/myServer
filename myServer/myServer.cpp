@@ -7,26 +7,35 @@ using namespace drogon::orm;
 
 int main()
 {
+    LOG_INFO << "Starting Drogon server...";
+
     const char* dbUrl = std::getenv("SUPABASE_DB_URL");
     if (!dbUrl || std::string(dbUrl).empty())
     {
-        LOG_ERROR << "SUPABASE_DB_URL is not set";
+        LOG_ERROR << "SUPABASE_DB_URL is not set or empty!";
         return 1;
     }
+    LOG_INFO << "SUPABASE_DB_URL loaded";
 
+    const char* serviceRole = std::getenv("SUPABASE_SERVICE_ROLE");
+    if (!serviceRole || std::string(serviceRole).empty())
+    {
+        LOG_WARN << "SUPABASE_SERVICE_ROLE not set (read-only access only)";
+    }
+     
     auto db = drogon::orm::DbClient::newPgClient(dbUrl, 5);
 
     db->execSqlAsync(
         "SELECT now()",
         [](const drogon::orm::Result& r) {
-            LOG_INFO << "Connected OK " << r[0]["now"].as<std::string>();
+            LOG_INFO << " DB connected, time: " << r[0]["now"].as<std::string>();
         },
         [](const std::exception_ptr& e) {
             try {
                 if (e) std::rethrow_exception(e);
             }
             catch (const std::exception& ex) {
-                LOG_ERROR << "DB failed: " << ex.what();
+                LOG_ERROR << " DB connection failed: " << ex.what();
             }
         }
     );
@@ -57,11 +66,9 @@ int main()
                 query,
                 [cb](const Result& r) {
                     Json::Value arr(Json::arrayValue);
-                    for (const auto& row : r)
-                    {
+                    for (const auto& row : r) {
                         Json::Value item;
-                        for (int i = 0; i < r.columns(); i++)
-                        {
+                        for (int i = 0; i < r.columns(); i++) {
                             std::string colName = r.columnName(i);
                             if (row[i].isNull())
                                 item[colName] = "";
@@ -99,28 +106,19 @@ int main()
     app().registerHandler(
         "/api/all",
         [db](const HttpRequestPtr&, std::function<void(const HttpResponsePtr&)>&& cb) {
-            auto f1 = db->execSqlAsyncFuture("SELECT * FROM persons ORDER BY id DESC LIMIT 20");
-            auto f2 = db->execSqlAsyncFuture("SELECT * FROM cameras ORDER BY id DESC LIMIT 20");
-            auto f3 = db->execSqlAsyncFuture("SELECT * FROM events ORDER BY timestamp DESC LIMIT 20");
-            auto f4 = db->execSqlAsyncFuture("SELECT * FROM alerts ORDER BY created_at DESC LIMIT 20");
-            auto f5 = db->execSqlAsyncFuture("SELECT * FROM system_logs ORDER BY created_at DESC LIMIT 20");
-            auto f6 = db->execSqlAsyncFuture("SELECT * FROM embeddings ORDER BY created_at DESC LIMIT 20");
-
             try {
-                Result r1 = f1.get();
-                Result r2 = f2.get();
-                Result r3 = f3.get();
-                Result r4 = f4.get();
-                Result r5 = f5.get();
-                Result r6 = f6.get();
+                auto f1 = db->execSqlAsyncFuture("SELECT * FROM persons ORDER BY id DESC LIMIT 20");
+                auto f2 = db->execSqlAsyncFuture("SELECT * FROM cameras ORDER BY id DESC LIMIT 20");
+                auto f3 = db->execSqlAsyncFuture("SELECT * FROM events ORDER BY timestamp DESC LIMIT 20");
+                auto f4 = db->execSqlAsyncFuture("SELECT * FROM alerts ORDER BY created_at DESC LIMIT 20");
+                auto f5 = db->execSqlAsyncFuture("SELECT * FROM system_logs ORDER BY created_at DESC LIMIT 20");
+                auto f6 = db->execSqlAsyncFuture("SELECT * FROM embeddings ORDER BY created_at DESC LIMIT 20");
 
                 auto toArray = [](const Result& r) {
                     Json::Value arr(Json::arrayValue);
-                    for (const auto& row : r)
-                    {
+                    for (const auto& row : r) {
                         Json::Value item;
-                        for (int i = 0; i < r.columns(); i++)
-                        {
+                        for (int i = 0; i < r.columns(); i++) {
                             std::string colName = r.columnName(i);
                             if (row[i].isNull())
                                 item[colName] = "";
@@ -133,12 +131,12 @@ int main()
                     };
 
                 Json::Value all;
-                all["persons"] = toArray(r1);
-                all["cameras"] = toArray(r2);
-                all["events"] = toArray(r3);
-                all["alerts"] = toArray(r4);
-                all["system_logs"] = toArray(r5);
-                all["embeddings"] = toArray(r6);
+                all["persons"] = toArray(f1.get());
+                all["cameras"] = toArray(f2.get());
+                all["events"] = toArray(f3.get());
+                all["alerts"] = toArray(f4.get());
+                all["system_logs"] = toArray(f5.get());
+                all["embeddings"] = toArray(f6.get());
 
                 cb(HttpResponse::newHttpJsonResponse(all));
             }
@@ -150,9 +148,14 @@ int main()
         },
         { Get }
     );
-   
+
+    const char* portEnv = std::getenv("PORT");
+    uint16_t port = portEnv ? std::stoi(portEnv) : 8080;
+
+    LOG_INFO << " Listening on 0.0.0.0:" << port;
+
     drogon::app()
-        .addListener("0.0.0.0", 8080)
+        .addListener("0.0.0.0", port)
         .setThreadNum(2)
         .run();
 

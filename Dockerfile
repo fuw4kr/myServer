@@ -11,11 +11,13 @@ RUN git clone --recursive https://github.com/drogonframework/drogon.git /tmp/dro
 WORKDIR /app
 COPY . .
 
+WORKDIR /app/myServer
+
 RUN mkdir build \
     && cd build \
-    && cmake ../myServer \
+    && cmake .. \
     && make -j$(nproc)
 
 EXPOSE 8080
 
-CMD ["./build/myServerApp"]
+CMD ["./build/myServer/myServerApp"]

@@ -149,10 +149,14 @@ int main()
         { Get }
     );
 
-    const char* portEnv = std::getenv("PORT");
-    uint16_t port = portEnv ? std::stoi(portEnv) : 8080;
+    uint16_t port = 8080;
+    if (const char* p = std::getenv("PORT")) {
+        try { port = std::stoi(p); }
+        catch (...) { port = 8080; }
+    }
 
-    LOG_INFO << " Listening on 0.0.0.0:" << port;
+    LOG_INFO << "Listening on 0.0.0.0:" << port;
+
 
     drogon::app()
         .addListener("0.0.0.0", port)

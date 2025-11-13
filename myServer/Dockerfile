@@ -15,4 +15,4 @@ RUN mkdir build && cd build && cmake .. && make -j$(nproc)
 
 EXPOSE 8080
 
-CMD ["./build/myServerApp"]
+CMD ["/app/build/myServerApp"]

@@ -58,7 +58,8 @@ int main()
             info["endpoints"].append("/api/all");
             cb(HttpResponse::newHttpJsonResponse(info));
         },
-        { Get }
+        { Get },
+        { "AuthFilter" }
     );
 
     auto makeHandler = [db](const std::string& table, const std::string& orderBy, int limit = 20) {

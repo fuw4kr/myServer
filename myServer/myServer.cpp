@@ -1,7 +1,7 @@
-﻿#include "AuthFilter.h"   
-#include <drogon/drogon.h>
+﻿#include <drogon/drogon.h>
 #include <drogon/orm/DbClient.h>
 #include <json/json.h>
+#include "AuthFilter.h"
 
 using namespace drogon;
 using namespace drogon::orm;
@@ -40,6 +40,8 @@ int main()
             }
         }
     );
+
+    app().registerFilter(std::make_shared<AuthFilter>());
 
     app().registerHandler(
         "/",
@@ -99,7 +101,7 @@ int main()
         "/api/persons",
         makeHandler("persons", "id"),
         { Get },
-        { "AuthFilter" }   
+        { "AuthFilter" }
     );
 
     app().registerHandler(
@@ -182,7 +184,7 @@ int main()
             }
         },
         { Get },
-        { "AuthFilter" }   
+        { "AuthFilter" }
     );
 
     uint16_t port = 8080;

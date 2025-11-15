@@ -20,6 +20,8 @@ endif()
 add_executable(${PROJECT_NAME}
     myServer.cpp
     myServer.h
+    AuthFilter.cpp
+    AuthFilter.h
 )
 
 target_link_libraries(${PROJECT_NAME}

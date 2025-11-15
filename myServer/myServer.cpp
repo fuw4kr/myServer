@@ -1,4 +1,5 @@
-﻿#include <drogon/drogon.h>
+﻿#include "AuthFilter.h"   
+#include <drogon/drogon.h>
 #include <drogon/orm/DbClient.h>
 #include <json/json.h>
 
@@ -22,7 +23,7 @@ int main()
     {
         LOG_WARN << "SUPABASE_SERVICE_ROLE not set (read-only access only)";
     }
-     
+
     auto db = drogon::orm::DbClient::newPgClient(dbUrl, 5);
 
     db->execSqlAsync(
@@ -40,7 +41,6 @@ int main()
         }
     );
 
-    // === Root endpoint ===
     app().registerHandler(
         "/",
         [](const HttpRequestPtr&, std::function<void(const HttpResponsePtr&)>&& cb) {
@@ -95,12 +95,47 @@ int main()
             };
         };
 
-    app().registerHandler("/api/persons", makeHandler("persons", "id"), { Get });
-    app().registerHandler("/api/cameras", makeHandler("cameras", "id"), { Get });
-    app().registerHandler("/api/events", makeHandler("events", "timestamp"), { Get });
-    app().registerHandler("/api/alerts", makeHandler("alerts", "created_at"), { Get });
-    app().registerHandler("/api/system_logs", makeHandler("system_logs", "created_at"), { Get });
-    app().registerHandler("/api/embeddings", makeHandler("embeddings", "created_at"), { Get });
+    app().registerHandler(
+        "/api/persons",
+        makeHandler("persons", "id"),
+        { Get },
+        { "AuthFilter" }   
+    );
+
+    app().registerHandler(
+        "/api/cameras",
+        makeHandler("cameras", "id"),
+        { Get },
+        { "AuthFilter" }
+    );
+
+    app().registerHandler(
+        "/api/events",
+        makeHandler("events", "timestamp"),
+        { Get },
+        { "AuthFilter" }
+    );
+
+    app().registerHandler(
+        "/api/alerts",
+        makeHandler("alerts", "created_at"),
+        { Get },
+        { "AuthFilter" }
+    );
+
+    app().registerHandler(
+        "/api/system_logs",
+        makeHandler("system_logs", "created_at"),
+        { Get },
+        { "AuthFilter" }
+    );
+
+    app().registerHandler(
+        "/api/embeddings",
+        makeHandler("embeddings", "created_at"),
+        { Get },
+        { "AuthFilter" }
+    );
 
     // === /api/all ===
     app().registerHandler(
@@ -146,7 +181,8 @@ int main()
                 cb(resp);
             }
         },
-        { Get }
+        { Get },
+        { "AuthFilter" }   
     );
 
     uint16_t port = 8080;
@@ -156,7 +192,6 @@ int main()
     }
 
     LOG_INFO << "Listening on 0.0.0.0:" << port;
-
 
     drogon::app()
         .addListener("0.0.0.0", port)

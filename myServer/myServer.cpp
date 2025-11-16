@@ -21,7 +21,7 @@ int main()
     LOG_INFO << "SUPABASE_DB_URL loaded";
 
     // === Create DB client ===
-    auto db = drogon::orm::DbClient::newPgClient(dbUrl, 5);
+    auto db = drogon::orm::DbClient::newPgClient(dbUrl, 2);
 
     // === Test DB connection ===
     db->execSqlAsync(

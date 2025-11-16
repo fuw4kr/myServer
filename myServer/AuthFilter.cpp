@@ -9,10 +9,13 @@ void AuthFilter::doFilter(
     FilterCallback&& fcb,
     FilterChainCallback&& fccb)
 {
+    LOG_INFO << "AuthFilter hit";
     auto auth = req->getHeader("Authorization");
+    LOG_INFO << "Authorization header: " << auth;
 
     if (auth.rfind("Bearer ", 0) != 0)
     {
+        LOG_INFO << "No Bearer prefix";
         auto resp = HttpResponse::newHttpJsonResponse(
             Json::Value("Unauthorized")
         );

@@ -2,12 +2,15 @@
 #include <drogon/HttpFilter.h>
 #include <drogon/orm/DbClient.h>
 
-class AuthFilter : public drogon::HttpFilter<AuthFilter>
+class AuthFilter : public drogon::HttpFilter<AuthFilter, false>
 {
 public:
     static constexpr const char* className = "AuthFilter";
 
-    AuthFilter();
+    explicit AuthFilter(const drogon::orm::DbClientPtr& db)
+        : db_(db)
+    {
+    }
 
     void doFilter(
         const drogon::HttpRequestPtr& req,

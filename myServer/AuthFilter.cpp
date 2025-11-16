@@ -4,15 +4,6 @@
 
 using namespace drogon;
 
-AuthFilter::AuthFilter()
-{
-    db_ = drogon::app().getDbClient("default");
-    if (!db_)
-    {
-        db_ = drogon::app().getDbClient();
-    }
-}
-
 void AuthFilter::doFilter(
     const HttpRequestPtr& req,
     FilterCallback&& fcb,
@@ -59,5 +50,3 @@ void AuthFilter::doFilter(
         token
     );
 }
-
-REGISTER_FILTER(AuthFilter);

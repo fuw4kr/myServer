@@ -22,7 +22,6 @@ int main()
 
     // === Create DB client ===
     auto db = drogon::orm::DbClient::newPgClient(dbUrl, 5);
-    app().registerDbClient(db, "default");
 
     // === Test DB connection ===
     db->execSqlAsync(
@@ -37,6 +36,9 @@ int main()
             }
         }
     );
+
+    // === Register AuthFilter globally ===
+    app().registerFilter(std::make_shared<AuthFilter>(db));
 
     // === Register AuthController for /auth/login ===
     app().registerController(std::make_shared<AuthController>(db));

@@ -5,6 +5,8 @@
 class AuthFilter : public drogon::HttpFilter<AuthFilter, false>
 {
 public:
+    static constexpr const char* className = "AuthFilter";
+
     explicit AuthFilter(const drogon::orm::DbClientPtr& db)
         : db_(db)
     {

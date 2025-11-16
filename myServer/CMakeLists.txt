@@ -20,8 +20,8 @@ endif()
 add_executable(${PROJECT_NAME}
     myServer.cpp
     myServer.h
-    AuthFilter.cpp
-    AuthFilter.h
+    src/filters/AuthFilter.cpp
+    src/filters/AuthFilter.h
     src/controllers/AuthController.h
     src/controllers/AuthController.cpp)
 

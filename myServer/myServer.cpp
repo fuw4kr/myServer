@@ -1,7 +1,7 @@
 ﻿#include <drogon/drogon.h>
 #include <drogon/orm/DbClient.h>
 #include <json/json.h>
-#include "AuthFilter.h"
+#include "src/filters/AuthFilter.h"
 #include "src/controllers/AuthController.h"
 
 using namespace drogon;

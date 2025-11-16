@@ -1,34 +1,52 @@
 #include "AuthFilter.h"
-#include <cstdlib>
 #include <drogon/drogon.h>
+#include <json/json.h>
+
+using namespace drogon;
 
 void AuthFilter::doFilter(
-    const drogon::HttpRequestPtr& req,
-    drogon::FilterCallback&& fcb,
-    drogon::FilterChainCallback&& fccb)
+    const HttpRequestPtr& req,
+    FilterCallback&& fcb,
+    FilterChainCallback&& fccb)
 {
     auto auth = req->getHeader("Authorization");
 
-    const char* tokenEnv = std::getenv("API_TOKEN");
-    std::string required = tokenEnv ? tokenEnv : "";
-
-    if (required.empty())
+    if (auth.rfind("Bearer ", 0) != 0)
     {
-        auto resp = drogon::HttpResponse::newHttpJsonResponse("API_TOKEN not configured");
-        resp->setStatusCode(drogon::k500InternalServerError);
+        auto resp = HttpResponse::newHttpJsonResponse(
+            Json::Value("Unauthorized")
+        );
+        resp->setStatusCode(k401Unauthorized);
         fcb(resp);
         return;
     }
 
-    std::string correctValue = "Bearer " + required;
+    std::string token = auth.substr(7);
 
-    if (auth != correctValue)
-    {
-        auto resp = drogon::HttpResponse::newHttpJsonResponse("Unauthorized");
-        resp->setStatusCode(drogon::k401Unauthorized);
-        fcb(resp);
-        return;
-    }
+    db_->execSqlAsync(
+        "SELECT id FROM users WHERE api_token=$1",
+        [fcb, fccb](const orm::Result& res) mutable
+        {
+            if (res.empty())
+            {
+                auto resp = HttpResponse::newHttpJsonResponse(
+                    Json::Value("Invalid token")
+                );
+                resp->setStatusCode(k401Unauthorized);
+                fcb(resp);
+                return;
+            }
 
-    fccb();
+            fccb();
+        },
+        [fcb](const std::exception_ptr& e) mutable
+        {
+            auto resp = HttpResponse::newHttpJsonResponse(
+                Json::Value("DB error")
+            );
+            resp->setStatusCode(k500InternalServerError);
+            fcb(resp);
+        },
+        token
+    );
 }

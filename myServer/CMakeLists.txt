@@ -14,7 +14,7 @@ find_package(Drogon CONFIG REQUIRED)
 
 find_package(PostgreSQL REQUIRED)
 if(NOT PostgreSQL_FOUND)
-    message(FATAL_ERROR " PostgreSQL (libpq) не знайдено! Встанови через vcpkg: vcpkg install libpq:x64-windows")
+    message(FATAL_ERROR " PostgreSQL (libpq) not found! Install via vcpkg: vcpkg install libpq:x64-windows")
 endif()
 
 add_executable(${PROJECT_NAME}
@@ -22,7 +22,8 @@ add_executable(${PROJECT_NAME}
     myServer.h
     AuthFilter.cpp
     AuthFilter.h
-)
+    src/controllers/AuthController.h
+    src/controllers/AuthController.cpp)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

@@ -65,7 +65,8 @@ int main()
 
             cb(HttpResponse::newHttpJsonResponse(info));
         },
-        { Get }
+        { Get },
+        { "AuthFilter" }
     );
 
     // ================================================================

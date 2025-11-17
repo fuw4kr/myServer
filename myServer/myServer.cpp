@@ -65,8 +65,7 @@ int main()
 
             cb(HttpResponse::newHttpJsonResponse(info));
         },
-        { Get },
-        { "AuthFilter" }
+        { Get, "AuthFilter" }
     );
 
     // ================================================================
@@ -118,12 +117,12 @@ int main()
     // ================================================================
     // =================== PROTECTED API ROUTES ========================
     // ================================================================
-    app().registerHandler("/api/persons", makeHandler("persons", "id"), { Get }, { "AuthFilter" });
-    app().registerHandler("/api/cameras", makeHandler("cameras", "id"), { Get }, { "AuthFilter" });
-    app().registerHandler("/api/events", makeHandler("events", "timestamp"), { Get }, { "AuthFilter" });
-    app().registerHandler("/api/alerts", makeHandler("alerts", "created_at"), { Get }, { "AuthFilter" });
-    app().registerHandler("/api/system_logs", makeHandler("system_logs", "created_at"), { Get }, { "AuthFilter" });
-    app().registerHandler("/api/embeddings", makeHandler("embeddings", "created_at"), { Get }, { "AuthFilter" });
+    app().registerHandler("/api/persons", makeHandler("persons", "id"), { Get, "AuthFilter" });
+    app().registerHandler("/api/cameras", makeHandler("cameras", "id"), { Get, "AuthFilter" });
+    app().registerHandler("/api/events", makeHandler("events", "timestamp"), { Get, "AuthFilter" });
+    app().registerHandler("/api/alerts", makeHandler("alerts", "created_at"), { Get, "AuthFilter" });
+    app().registerHandler("/api/system_logs", makeHandler("system_logs", "created_at"), { Get, "AuthFilter" });
+    app().registerHandler("/api/embeddings", makeHandler("embeddings", "created_at"), { Get, "AuthFilter" });
 
     // ================================================================
     // ========================= /api/all ==============================
@@ -176,8 +175,7 @@ int main()
                 cb(resp);
             }
         },
-        { Get },
-        { "AuthFilter" }
+        { Get, "AuthFilter" }
     );
 
     // ================================================================

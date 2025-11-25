@@ -2,6 +2,7 @@
 #include <drogon/drogon.h>
 #include <json/json.h>
 #include <stdexcept>
+#include "../security/PasswordHasher.h"
 
 using namespace drogon;
 using namespace drogon::orm;
@@ -50,7 +51,34 @@ void AuthController::login(
             std::string dbPass = r[0]["password"].as<std::string>();
             std::string userId = r[0]["id"].as<std::string>();
 
-            if (dbPass != password)
+            bool passwordMatches = false;
+            bool needsUpgrade = false;
+            std::string upgradedHash;
+
+            const bool storedAsHash = dbPass.rfind("$2", 0) == 0;
+            if (storedAsHash)
+            {
+                passwordMatches = PasswordHasher::verifyPassword(password, dbPass);
+            }
+            else
+            {
+                passwordMatches = (dbPass == password);
+                if (passwordMatches)
+                {
+                    try
+                    {
+                        upgradedHash = PasswordHasher::hashPassword(password);
+                        needsUpgrade = true;
+                    }
+                    catch (const std::exception& ex)
+                    {
+                        LOG_WARN << "Failed to upgrade password hash for user " << userId
+                                 << ": " << ex.what();
+                    }
+                }
+            }
+
+            if (!passwordMatches)
             {
                 Json::Value err;
                 err["error"] = "Invalid email or password";
@@ -64,10 +92,7 @@ void AuthController::login(
             // Generate token
             std::string token = drogon::utils::getUuid();
 
-            // Save token
-            db_->execSqlAsync(
-                "UPDATE users SET api_token=$1 WHERE id=$2",
-                [callback, token, userId](const Result&)
+            auto onSuccess = [callback, token, userId](const Result&)
                 {
                     Json::Value body;
                     body["token"] = token;
@@ -76,8 +101,9 @@ void AuthController::login(
                     auto resp = HttpResponse::newHttpJsonResponse(body);
                     resp->setStatusCode(k200OK);
                     callback(resp);
-                },
-                [callback](const std::exception_ptr&)
+                };
+
+            auto onError = [callback](const std::exception_ptr&)
                 {
                     Json::Value err;
                     err["error"] = "Database error";
@@ -85,8 +111,27 @@ void AuthController::login(
                     auto resp = HttpResponse::newHttpJsonResponse(err);
                     resp->setStatusCode(k500InternalServerError);
                     callback(resp);
-                },
-                token, userId);
+                };
+
+            if (needsUpgrade && !upgradedHash.empty())
+            {
+                db_->execSqlAsync(
+                    "UPDATE users SET api_token=$1, password=$3 WHERE id=$2",
+                    onSuccess,
+                    onError,
+                    token,
+                    userId,
+                    upgradedHash);
+            }
+            else
+            {
+                db_->execSqlAsync(
+                    "UPDATE users SET api_token=$1 WHERE id=$2",
+                    onSuccess,
+                    onError,
+                    token,
+                    userId);
+            }
         },
         [callback](const std::exception_ptr&)
         {

@@ -9,6 +9,9 @@ build
 out
 vcpkg_installed
 
+# Runtime uploads/temp artifacts
+uploads/
+
 # Prerequisites
 *.d
 

@@ -1,5 +1,5 @@
-﻿cmake_minimum_required(VERSION 3.16)
-project(myServerApp LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
+project(myServerApp LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,7 +23,24 @@ add_executable(${PROJECT_NAME}
     src/filters/AuthFilter.cpp
     src/filters/AuthFilter.h
     src/controllers/AuthController.h
-    src/controllers/AuthController.cpp)
+    src/controllers/AuthController.cpp
+    src/security/PasswordHasher.cpp
+    src/security/PasswordHasher.h
+    src/security/bcrypt/bcrypt.c
+    src/security/bcrypt/bcrypt_wrapper.h
+    src/security/bcrypt/crypt_blowfish/crypt_blowfish.c
+    src/security/bcrypt/crypt_blowfish/crypt_blowfish.h
+    src/security/bcrypt/crypt_blowfish/crypt_gensalt.c
+    src/security/bcrypt/crypt_blowfish/crypt_gensalt.h
+    src/security/bcrypt/crypt_blowfish/ow-crypt.h
+    src/security/bcrypt/crypt_blowfish/wrapper.c)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/security
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/security/bcrypt
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/security/bcrypt/crypt_blowfish
+)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -31,7 +48,10 @@ target_link_libraries(${PROJECT_NAME}
         PostgreSQL::PostgreSQL
 )
 
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Bcrypt)
+endif ()
+
 message(STATUS " Drogon version: ${DROGON_VERSION}")
 message(STATUS " PostgreSQL include dir: ${PostgreSQL_INCLUDE_DIRS}")
 message(STATUS " PostgreSQL library: ${PostgreSQL_LIBRARIES}")
-

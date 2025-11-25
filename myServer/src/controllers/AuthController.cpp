@@ -6,13 +6,11 @@
 using namespace drogon;
 using namespace drogon::orm;
 
-AuthController::AuthController(const drogon::orm::DbClientPtr& db)
+AuthController::AuthController(const DbClientPtr& db)
     : db_(db)
 {
     if (!db_)
-    {
         throw std::invalid_argument("AuthController requires a valid DbClient");
-    }
 }
 
 void AuthController::login(
@@ -22,7 +20,10 @@ void AuthController::login(
     auto json = req->getJsonObject();
     if (!json || !json->isMember("email") || !json->isMember("password"))
     {
-        auto resp = HttpResponse::newHttpJsonResponse("Missing fields");
+        Json::Value error;
+        error["error"] = "Missing fields";
+
+        auto resp = HttpResponse::newHttpJsonResponse(error);
         resp->setStatusCode(k400BadRequest);
         callback(resp);
         return;
@@ -37,7 +38,10 @@ void AuthController::login(
         {
             if (r.empty())
             {
-                auto resp = HttpResponse::newHttpJsonResponse("Invalid email or password");
+                Json::Value err;
+                err["error"] = "Invalid email or password";
+
+                auto resp = HttpResponse::newHttpJsonResponse(err);
                 resp->setStatusCode(k401Unauthorized);
                 callback(resp);
                 return;
@@ -48,16 +52,19 @@ void AuthController::login(
 
             if (dbPass != password)
             {
-                auto resp = HttpResponse::newHttpJsonResponse("Invalid email or password");
+                Json::Value err;
+                err["error"] = "Invalid email or password";
+
+                auto resp = HttpResponse::newHttpJsonResponse(err);
                 resp->setStatusCode(k401Unauthorized);
                 callback(resp);
                 return;
             }
 
-            // --- Generate token ---
+            // Generate token
             std::string token = drogon::utils::getUuid();
 
-            // --- Store token ---
+            // Save token
             db_->execSqlAsync(
                 "UPDATE users SET api_token=$1 WHERE id=$2",
                 [callback, token, userId](const Result&)
@@ -70,17 +77,23 @@ void AuthController::login(
                     resp->setStatusCode(k200OK);
                     callback(resp);
                 },
-                [callback](const std::exception_ptr& e)
+                [callback](const std::exception_ptr&)
                 {
-                    auto resp = HttpResponse::newHttpJsonResponse("DB error");
+                    Json::Value err;
+                    err["error"] = "Database error";
+
+                    auto resp = HttpResponse::newHttpJsonResponse(err);
                     resp->setStatusCode(k500InternalServerError);
                     callback(resp);
                 },
                 token, userId);
         },
-        [callback](const std::exception_ptr& e)
+        [callback](const std::exception_ptr&)
         {
-            auto resp = HttpResponse::newHttpJsonResponse("DB error");
+            Json::Value err;
+            err["error"] = "Database error";
+
+            auto resp = HttpResponse::newHttpJsonResponse(err);
             resp->setStatusCode(k500InternalServerError);
             callback(resp);
         },

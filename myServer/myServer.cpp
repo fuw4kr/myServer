@@ -36,7 +36,6 @@ int main()
             }
         }
     );
-
     // === Register AuthFilter globally ===
     app().registerFilter(std::make_shared<AuthFilter>(db));
 

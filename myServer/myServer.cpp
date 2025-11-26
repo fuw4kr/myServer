@@ -36,7 +36,7 @@ int main()
             }
         }
     );
-    // === Register AuthFilter globally ===
+     // === Register AuthFilter globally ===
     app().registerFilter(std::make_shared<AuthFilter>(db));
 
     // === Register AuthController for /auth/login ===

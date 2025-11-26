@@ -27,13 +27,25 @@ void AuthFilter::doFilter(
     std::string token = auth.substr(7);
 
     db_->execSqlAsync(
-        "SELECT id FROM users WHERE api_token=$1",
+        "SELECT id, (api_token_expires_at IS NOT NULL AND api_token_expires_at <= NOW()) AS expired "
+        "FROM users WHERE api_token=$1",
         [fcb, fccb](const orm::Result& res) mutable
         {
             if (res.empty())
             {
                 auto resp = HttpResponse::newHttpJsonResponse(
                     Json::Value("Invalid token")
+                );
+                resp->setStatusCode(k401Unauthorized);
+                fcb(resp);
+                return;
+            }
+
+            bool isExpired = res[0]["expired"].as<bool>();
+            if (isExpired)
+            {
+                auto resp = HttpResponse::newHttpJsonResponse(
+                    Json::Value("Token expired")
                 );
                 resp->setStatusCode(k401Unauthorized);
                 fcb(resp);

@@ -2,10 +2,43 @@
 #include <drogon/drogon.h>
 #include <json/json.h>
 #include <stdexcept>
+#include <trantor/utils/Date.h>
+#include <cstdlib>
 #include "../security/PasswordHasher.h"
 
 using namespace drogon;
 using namespace drogon::orm;
+
+namespace
+{
+double getTokenTtlSeconds()
+{
+    static double value = []() {
+        constexpr double kDefaultTtl = 24.0 * 60.0 * 60.0; // 24 hours
+        const char* env = std::getenv("TOKEN_TTL_SECONDS");
+        if (!env)
+            return kDefaultTtl;
+
+        try
+        {
+            double parsed = std::stod(env);
+            if (parsed > 0.0)
+            {
+                LOG_INFO << "Using TOKEN_TTL_SECONDS=" << parsed;
+                return parsed;
+            }
+            LOG_WARN << "TOKEN_TTL_SECONDS must be positive. Falling back to default.";
+        }
+        catch (const std::exception& ex)
+        {
+            LOG_WARN << "Failed to parse TOKEN_TTL_SECONDS (" << env << "): " << ex.what();
+        }
+        return kDefaultTtl;
+    }();
+
+    return value;
+}
+}
 
 AuthController::AuthController(const DbClientPtr& db)
     : db_(db)
@@ -91,12 +124,14 @@ void AuthController::login(
 
             // Generate token
             std::string token = drogon::utils::getUuid();
+            auto tokenExpiry = trantor::Date::now().after(getTokenTtlSeconds());
 
-            auto onSuccess = [callback, token, userId](const Result&)
+            auto onSuccess = [callback, token, userId, tokenExpiry](const Result&)
                 {
                     Json::Value body;
                     body["token"] = token;
                     body["userId"] = userId;
+                    body["expiresAt"] = tokenExpiry.toDbString();
 
                     auto resp = HttpResponse::newHttpJsonResponse(body);
                     resp->setStatusCode(k200OK);
@@ -116,21 +151,23 @@ void AuthController::login(
             if (needsUpgrade && !upgradedHash.empty())
             {
                 db_->execSqlAsync(
-                    "UPDATE users SET api_token=$1, password=$3 WHERE id=$2",
+                    "UPDATE users SET api_token=$1, password=$3, api_token_expires_at=$4 WHERE id=$2",
                     onSuccess,
                     onError,
                     token,
                     userId,
-                    upgradedHash);
+                    upgradedHash,
+                    tokenExpiry);
             }
             else
             {
                 db_->execSqlAsync(
-                    "UPDATE users SET api_token=$1 WHERE id=$2",
+                    "UPDATE users SET api_token=$1, api_token_expires_at=$3 WHERE id=$2",
                     onSuccess,
                     onError,
                     token,
-                    userId);
+                    userId,
+                    tokenExpiry);
             }
         },
         [callback](const std::exception_ptr&)

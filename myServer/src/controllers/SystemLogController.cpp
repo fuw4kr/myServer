@@ -1,7 +1,12 @@
 #include "SystemLogController.h"
+#include "../dto/EntityDtos.h"
 
 SystemLogController::SystemLogController(const drogon::orm::DbClientPtr& db)
-    : TableControllerBase(db, "system_logs", "created_at")
+    : TableControllerBase(db,
+                          "system_logs",
+                          "created_at",
+                          dto::SystemLogDto::columns(),
+                          dto::SystemLogDto::fromRow)
 {
 }
 

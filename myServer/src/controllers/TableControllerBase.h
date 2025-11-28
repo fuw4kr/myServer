@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <vector>
 #include "../repositories/TableRepository.h"
 
 // Shared helper for controllers that expose simple table reads.
@@ -13,6 +14,8 @@ public:
     TableControllerBase(const drogon::orm::DbClientPtr& db,
                         std::string tableName,
                         std::string orderByColumn,
+                        std::vector<std::string> columns,
+                        TableRepository::RowMapper rowMapper,
                         int defaultLimit = 20);
     virtual ~TableControllerBase() = default;
 

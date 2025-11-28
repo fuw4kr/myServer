@@ -1,7 +1,12 @@
 #include "EmbeddingController.h"
+#include "../dto/EntityDtos.h"
 
 EmbeddingController::EmbeddingController(const drogon::orm::DbClientPtr& db)
-    : TableControllerBase(db, "embeddings", "created_at")
+    : TableControllerBase(db,
+                          "embeddings",
+                          "created_at",
+                          dto::EmbeddingDto::columns(),
+                          dto::EmbeddingDto::fromRow)
 {
 }
 

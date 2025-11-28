@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME}
     src/controllers/AllController.cpp
     src/controllers/RootController.h
     src/controllers/RootController.cpp
+    src/dto/EntityDtos.h
+    src/dto/EntityDtos.cpp
     src/repositories/TableRepository.h
     src/repositories/TableRepository.cpp
     src/repositories/UserRepository.h

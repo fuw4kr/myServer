@@ -1,7 +1,12 @@
 #include "PersonController.h"
+#include "../dto/EntityDtos.h"
 
 PersonController::PersonController(const drogon::orm::DbClientPtr& db)
-    : TableControllerBase(db, "persons", "id")
+    : TableControllerBase(db,
+                          "persons",
+                          "id",
+                          dto::PersonDto::columns(),
+                          dto::PersonDto::fromRow)
 {
 }
 

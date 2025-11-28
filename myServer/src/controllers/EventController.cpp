@@ -1,7 +1,12 @@
 #include "EventController.h"
+#include "../dto/EntityDtos.h"
 
 EventController::EventController(const drogon::orm::DbClientPtr& db)
-    : TableControllerBase(db, "events", "timestamp")
+    : TableControllerBase(db,
+                          "events",
+                          "timestamp",
+                          dto::EventDto::columns(),
+                          dto::EventDto::fromRow)
 {
 }
 

@@ -1,7 +1,12 @@
 #include "CameraController.h"
+#include "../dto/EntityDtos.h"
 
 CameraController::CameraController(const drogon::orm::DbClientPtr& db)
-    : TableControllerBase(db, "cameras", "id")
+    : TableControllerBase(db,
+                          "cameras",
+                          "id",
+                          dto::CameraDto::columns(),
+                          dto::CameraDto::fromRow)
 {
 }
 

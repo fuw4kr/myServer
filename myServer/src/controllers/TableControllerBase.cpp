@@ -9,9 +9,16 @@ using namespace drogon::orm;
 TableControllerBase::TableControllerBase(const DbClientPtr& db,
                                          std::string tableName,
                                          std::string orderByColumn,
+                                         std::vector<std::string> columns,
+                                         TableRepository::RowMapper rowMapper,
                                          int defaultLimit)
     : tableRepository_(std::make_shared<TableRepository>(
-          db, std::move(tableName), std::move(orderByColumn), defaultLimit))
+          db,
+          std::move(tableName),
+          std::move(orderByColumn),
+          std::move(columns),
+          std::move(rowMapper),
+          defaultLimit))
 {
     if (!tableRepository_)
     {
@@ -25,9 +32,9 @@ void TableControllerBase::fetchTable(
 {
     (void)req;
     tableRepository_->fetchLatest(
-        [cb = callback](const Result& result) mutable
+        [cb = callback, repo = tableRepository_](const Result& result) mutable
         {
-            cb(HttpResponse::newHttpJsonResponse(TableRepository::toJsonArray(result)));
+            cb(HttpResponse::newHttpJsonResponse(repo->toJsonArray(result)));
         },
         [cb = callback](const std::exception_ptr& ex) mutable
         {

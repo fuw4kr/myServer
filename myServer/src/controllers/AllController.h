@@ -2,6 +2,7 @@
 #include <drogon/HttpController.h>
 #include <drogon/orm/DbClient.h>
 #include <json/json.h>
+#include "../repositories/TableRepository.h"
 
 class AllController : public drogon::HttpController<AllController, false>
 {
@@ -16,7 +17,10 @@ public:
                 std::function<void(const drogon::HttpResponsePtr&)>&& callback);
 
 private:
-    drogon::orm::DbClientPtr db_;
-
-    static Json::Value toJsonArray(const drogon::orm::Result& result);
+    TableRepository personsRepo_;
+    TableRepository camerasRepo_;
+    TableRepository eventsRepo_;
+    TableRepository alertsRepo_;
+    TableRepository systemLogsRepo_;
+    TableRepository embeddingsRepo_;
 };

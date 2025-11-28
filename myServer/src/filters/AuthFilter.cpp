@@ -26,9 +26,8 @@ void AuthFilter::doFilter(
 
     std::string token = auth.substr(7);
 
-    db_->execSqlAsync(
-        "SELECT id, (api_token_expires_at IS NOT NULL AND api_token_expires_at <= NOW()) AS expired "
-        "FROM users WHERE api_token=$1",
+    userRepository_->findByToken(
+        token,
         [fcb, fccb](const orm::Result& res) mutable
         {
             if (res.empty())
@@ -61,7 +60,5 @@ void AuthFilter::doFilter(
             );
             resp->setStatusCode(k500InternalServerError);
             fcb(resp);
-        },
-        token
-    );
+        });
 }

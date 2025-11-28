@@ -1,9 +1,10 @@
 #pragma once
 #include <drogon/HttpController.h>
 #include <drogon/orm/DbClient.h>
-#include <json/json.h>
 #include <functional>
+#include <memory>
 #include <string>
+#include "../repositories/TableRepository.h"
 
 // Shared helper for controllers that expose simple table reads.
 class TableControllerBase
@@ -21,11 +22,5 @@ protected:
     void fetchTable(const drogon::HttpRequestPtr& req,
                     Callback callback) const;
 
-    drogon::orm::DbClientPtr db_;
-    const std::string table_;
-    const std::string orderBy_;
-    const int limit_;
-
-private:
-    static Json::Value toJsonArray(const drogon::orm::Result& result);
+    std::shared_ptr<TableRepository> tableRepository_;
 };

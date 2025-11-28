@@ -1,6 +1,8 @@
 #pragma once
 #include <drogon/HttpController.h>
 #include <drogon/orm/DbClient.h>
+#include <memory>
+#include "../repositories/UserRepository.h"
 
 class AuthController : public drogon::HttpController<AuthController, false>
 {
@@ -15,5 +17,5 @@ public:
         std::function<void(const drogon::HttpResponsePtr&)>&& callback);
 
 private:
-    drogon::orm::DbClientPtr db_;
+    std::shared_ptr<UserRepository> userRepository_;
 };

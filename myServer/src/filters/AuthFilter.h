@@ -1,6 +1,8 @@
 #pragma once
 #include <drogon/HttpFilter.h>
 #include <drogon/orm/DbClient.h>
+#include <memory>
+#include "../repositories/UserRepository.h"
 
 class AuthFilter : public drogon::HttpFilter<AuthFilter, false>
 {
@@ -8,7 +10,7 @@ public:
     static constexpr const char* className = "AuthFilter";
 
     explicit AuthFilter(const drogon::orm::DbClientPtr& db)
-        : db_(db)
+        : userRepository_(std::make_shared<UserRepository>(db))
     {
     }
 
@@ -18,5 +20,5 @@ public:
         drogon::FilterChainCallback&& fccb) override;
 
 private:
-    drogon::orm::DbClientPtr db_;
+    std::shared_ptr<UserRepository> userRepository_;
 };

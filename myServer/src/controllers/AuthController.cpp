@@ -41,10 +41,10 @@ double getTokenTtlSeconds()
 }
 
 AuthController::AuthController(const DbClientPtr& db)
-    : db_(db)
+    : userRepository_(std::make_shared<UserRepository>(db))
 {
-    if (!db_)
-        throw std::invalid_argument("AuthController requires a valid DbClient");
+    if (!userRepository_)
+        throw std::invalid_argument("AuthController failed to initialize repository");
 }
 
 void AuthController::login(
@@ -66,8 +66,8 @@ void AuthController::login(
     std::string email = (*json)["email"].asString();
     std::string password = (*json)["password"].asString();
 
-    db_->execSqlAsync(
-        "SELECT id, password FROM users WHERE email=$1",
+    userRepository_->findByEmail(
+        email,
         [this, callback, password](const Result& r)
         {
             if (r.empty())
@@ -150,24 +150,22 @@ void AuthController::login(
 
             if (needsUpgrade && !upgradedHash.empty())
             {
-                db_->execSqlAsync(
-                    "UPDATE users SET api_token=$1, password=$3, api_token_expires_at=$4 WHERE id=$2",
-                    onSuccess,
-                    onError,
-                    token,
+                userRepository_->updateTokenWithPassword(
                     userId,
+                    token,
                     upgradedHash,
-                    tokenExpiry);
+                    tokenExpiry,
+                    onSuccess,
+                    onError);
             }
             else
             {
-                db_->execSqlAsync(
-                    "UPDATE users SET api_token=$1, api_token_expires_at=$3 WHERE id=$2",
-                    onSuccess,
-                    onError,
-                    token,
+                userRepository_->updateToken(
                     userId,
-                    tokenExpiry);
+                    token,
+                    tokenExpiry,
+                    onSuccess,
+                    onError);
             }
         },
         [callback](const std::exception_ptr&)
@@ -178,6 +176,5 @@ void AuthController::login(
             auto resp = HttpResponse::newHttpJsonResponse(err);
             resp->setStatusCode(k500InternalServerError);
             callback(resp);
-        },
-        email);
+        });
 }

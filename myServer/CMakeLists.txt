@@ -42,6 +42,10 @@ add_executable(${PROJECT_NAME}
     src/controllers/AllController.cpp
     src/controllers/RootController.h
     src/controllers/RootController.cpp
+    src/repositories/TableRepository.h
+    src/repositories/TableRepository.cpp
+    src/repositories/UserRepository.h
+    src/repositories/UserRepository.cpp
     src/security/PasswordHasher.cpp
     src/security/PasswordHasher.h
     src/security/bcrypt/bcrypt.c

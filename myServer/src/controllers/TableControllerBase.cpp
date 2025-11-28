@@ -10,14 +10,12 @@ TableControllerBase::TableControllerBase(const DbClientPtr& db,
                                          std::string tableName,
                                          std::string orderByColumn,
                                          int defaultLimit)
-    : db_(db),
-      table_(std::move(tableName)),
-      orderBy_(std::move(orderByColumn)),
-      limit_(defaultLimit)
+    : tableRepository_(std::make_shared<TableRepository>(
+          db, std::move(tableName), std::move(orderByColumn), defaultLimit))
 {
-    if (!db_)
+    if (!tableRepository_)
     {
-        throw std::invalid_argument("TableControllerBase requires a valid DbClient");
+        throw std::invalid_argument("TableControllerBase failed to initialize repository");
     }
 }
 
@@ -26,14 +24,10 @@ void TableControllerBase::fetchTable(
     Callback callback) const
 {
     (void)req;
-    const std::string query =
-        "SELECT * FROM " + table_ + " ORDER BY " + orderBy_ + " DESC LIMIT " + std::to_string(limit_);
-
-    db_->execSqlAsync(
-        query,
+    tableRepository_->fetchLatest(
         [cb = callback](const Result& result) mutable
         {
-            cb(HttpResponse::newHttpJsonResponse(toJsonArray(result)));
+            cb(HttpResponse::newHttpJsonResponse(TableRepository::toJsonArray(result)));
         },
         [cb = callback](const std::exception_ptr& ex) mutable
         {
@@ -52,25 +46,4 @@ void TableControllerBase::fetchTable(
             resp->setStatusCode(k500InternalServerError);
             cb(resp);
         });
-}
-
-Json::Value TableControllerBase::toJsonArray(const Result& result)
-{
-    Json::Value array(Json::arrayValue);
-
-    for (const auto& row : result)
-    {
-        Json::Value item;
-        for (int i = 0; i < result.columns(); i++)
-        {
-            const std::string columnName = result.columnName(i);
-            if (row[i].isNull())
-                item[columnName] = "";
-            else
-                item[columnName] = row[i].as<std::string>();
-        }
-        array.append(item);
-    }
-
-    return array;
 }

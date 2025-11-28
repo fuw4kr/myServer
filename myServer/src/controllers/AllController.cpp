@@ -6,12 +6,13 @@ using namespace drogon;
 using namespace drogon::orm;
 
 AllController::AllController(const DbClientPtr& db)
-    : db_(db)
+    : personsRepo_(db, "persons", "id", 20),
+      camerasRepo_(db, "cameras", "id", 20),
+      eventsRepo_(db, "events", "timestamp", 20),
+      alertsRepo_(db, "alerts", "created_at", 20),
+      systemLogsRepo_(db, "system_logs", "created_at", 20),
+      embeddingsRepo_(db, "embeddings", "created_at", 20)
 {
-    if (!db_)
-    {
-        throw std::invalid_argument("AllController requires a valid DbClient");
-    }
 }
 
 void AllController::getAll(
@@ -21,20 +22,20 @@ void AllController::getAll(
     (void)req;
     try
     {
-        auto persons = db_->execSqlAsyncFuture("SELECT * FROM persons ORDER BY id DESC LIMIT 20");
-        auto cameras = db_->execSqlAsyncFuture("SELECT * FROM cameras ORDER BY id DESC LIMIT 20");
-        auto events = db_->execSqlAsyncFuture("SELECT * FROM events ORDER BY timestamp DESC LIMIT 20");
-        auto alerts = db_->execSqlAsyncFuture("SELECT * FROM alerts ORDER BY created_at DESC LIMIT 20");
-        auto systemLogs = db_->execSqlAsyncFuture("SELECT * FROM system_logs ORDER BY created_at DESC LIMIT 20");
-        auto embeddings = db_->execSqlAsyncFuture("SELECT * FROM embeddings ORDER BY created_at DESC LIMIT 20");
+        auto persons = personsRepo_.fetchLatestAsync();
+        auto cameras = camerasRepo_.fetchLatestAsync();
+        auto events = eventsRepo_.fetchLatestAsync();
+        auto alerts = alertsRepo_.fetchLatestAsync();
+        auto systemLogs = systemLogsRepo_.fetchLatestAsync();
+        auto embeddings = embeddingsRepo_.fetchLatestAsync();
 
         Json::Value all;
-        all["persons"] = toJsonArray(persons.get());
-        all["cameras"] = toJsonArray(cameras.get());
-        all["events"] = toJsonArray(events.get());
-        all["alerts"] = toJsonArray(alerts.get());
-        all["system_logs"] = toJsonArray(systemLogs.get());
-        all["embeddings"] = toJsonArray(embeddings.get());
+        all["persons"] = TableRepository::toJsonArray(persons.get());
+        all["cameras"] = TableRepository::toJsonArray(cameras.get());
+        all["events"] = TableRepository::toJsonArray(events.get());
+        all["alerts"] = TableRepository::toJsonArray(alerts.get());
+        all["system_logs"] = TableRepository::toJsonArray(systemLogs.get());
+        all["embeddings"] = TableRepository::toJsonArray(embeddings.get());
 
         callback(HttpResponse::newHttpJsonResponse(all));
     }
@@ -44,25 +45,4 @@ void AllController::getAll(
         resp->setStatusCode(k500InternalServerError);
         callback(resp);
     }
-}
-
-Json::Value AllController::toJsonArray(const Result& result)
-{
-    Json::Value array(Json::arrayValue);
-
-    for (const auto& row : result)
-    {
-        Json::Value item;
-        for (int i = 0; i < result.columns(); i++)
-        {
-            const std::string columnName = result.columnName(i);
-            if (row[i].isNull())
-                item[columnName] = "";
-            else
-                item[columnName] = row[i].as<std::string>();
-        }
-        array.append(item);
-    }
-
-    return array;
 }

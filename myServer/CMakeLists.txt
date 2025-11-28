@@ -24,6 +24,24 @@ add_executable(${PROJECT_NAME}
     src/filters/AuthFilter.h
     src/controllers/AuthController.h
     src/controllers/AuthController.cpp
+    src/controllers/TableControllerBase.h
+    src/controllers/TableControllerBase.cpp
+    src/controllers/PersonController.h
+    src/controllers/PersonController.cpp
+    src/controllers/CameraController.h
+    src/controllers/CameraController.cpp
+    src/controllers/EventController.h
+    src/controllers/EventController.cpp
+    src/controllers/AlertController.h
+    src/controllers/AlertController.cpp
+    src/controllers/SystemLogController.h
+    src/controllers/SystemLogController.cpp
+    src/controllers/EmbeddingController.h
+    src/controllers/EmbeddingController.cpp
+    src/controllers/AllController.h
+    src/controllers/AllController.cpp
+    src/controllers/RootController.h
+    src/controllers/RootController.cpp
     src/security/PasswordHasher.cpp
     src/security/PasswordHasher.h
     src/security/bcrypt/bcrypt.c

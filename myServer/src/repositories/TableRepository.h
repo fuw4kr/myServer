@@ -47,7 +47,23 @@ public:
 
     std::future<drogon::orm::Result> fetchLatestAsync() const;
 
+    void insert(const Json::Value& data,
+                const std::vector<std::string>& allowedColumns,
+                const ResultCallback& onSuccess,
+                const ErrorCallback& onError) const;
+
+    void updateById(const std::string& id,
+                    const Json::Value& data,
+                    const std::vector<std::string>& allowedColumns,
+                    const ResultCallback& onSuccess,
+                    const ErrorCallback& onError) const;
+
+    void deleteById(const std::string& id,
+                    const ResultCallback& onSuccess,
+                    const ErrorCallback& onError) const;
+
     Json::Value toJsonArray(const drogon::orm::Result& result) const;
+    Json::Value toJsonObject(const drogon::orm::Result& result) const;
 
 private:
     drogon::orm::DbClientPtr db_;
@@ -60,4 +76,9 @@ private:
     std::string buildQuery() const;
     static Json::Value defaultRowMapper(drogon::orm::Row row, const drogon::orm::Result& res);
     std::string buildColumnList() const;
+    std::string buildColumnList(const std::vector<std::string>& columns) const;
+    static std::string buildPlaceholders(size_t count, size_t startIndex = 1);
+    static std::vector<std::string> filterWritableColumns(const Json::Value& data,
+                                                          const std::vector<std::string>& allowedColumns);
+    static std::string buildParamName(size_t index);
 };

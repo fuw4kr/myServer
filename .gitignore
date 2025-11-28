@@ -9,6 +9,9 @@ build
 out
 vcpkg_installed
 
+# Local data artifacts
+person.json
+
 # Runtime uploads/temp artifacts
 uploads/
 

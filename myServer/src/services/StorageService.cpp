@@ -103,6 +103,7 @@ StorageService::StorageService()
         keyEnv = trimWhitespace(getEnv("SUPABASE_SERVICE_ROLE"));
     const std::string bucketEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_BUCKET"));
     const std::string folderEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_AVATAR_FOLDER"));
+    const std::string unknownFolderEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_UNKNOWN_FOLDER"));
     const bool skipTlsVerify = isTruthy(trimWhitespace(getEnv("SUPABASE_STORAGE_SKIP_TLS_VERIFY"))) ||
                                isTruthy(trimWhitespace(getEnv("SUPABASE_SKIP_TLS_VERIFY")));
 
@@ -121,6 +122,7 @@ StorageService::StorageService()
 
     bucket_ = stripSlashes(bucketEnv);
     folder_ = stripSlashes(folderEnv.empty() ? "avatars" : folderEnv);
+    unknownFolder_ = stripSlashes(unknownFolderEnv.empty() ? "unknown-faces" : unknownFolderEnv);
     serviceKey_ = keyEnv;
 
     if (bucket_.empty())
@@ -152,6 +154,23 @@ void StorageService::uploadAvatar(
     const SuccessCallback& onSuccess,
     const ErrorCallback& onError) const
 {
+    uploadWithFolder(file, folder_, onSuccess, onError);
+}
+
+void StorageService::uploadUnknown(
+    const drogon::HttpFile& file,
+    const SuccessCallback& onSuccess,
+    const ErrorCallback& onError) const
+{
+    uploadWithFolder(file, unknownFolder_, onSuccess, onError);
+}
+
+void StorageService::uploadWithFolder(
+    const drogon::HttpFile& file,
+    const std::string& folder,
+    const SuccessCallback& onSuccess,
+    const ErrorCallback& onError) const
+{
     if (!isReady_ || !client_)
     {
         onError("Storage service is not configured");
@@ -166,7 +185,7 @@ void StorageService::uploadAvatar(
     }
 
     const std::string extension = normalizeExtension(std::string(file.getFileExtension()));
-    const std::string objectPath = buildObjectPath(extension);
+    const std::string objectPath = buildObjectPath(folder, extension);
 
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::Post);
@@ -211,7 +230,7 @@ void StorageService::uploadAvatar(
         30.0);
 }
 
-std::string StorageService::buildObjectPath(const std::string& extension) const
+std::string StorageService::buildObjectPath(const std::string& folder, const std::string& extension) const
 {
     std::string name = drogon::utils::getUuid();
     if (!extension.empty())
@@ -220,10 +239,10 @@ std::string StorageService::buildObjectPath(const std::string& extension) const
         name += extension;
     }
 
-    if (folder_.empty())
+    if (folder.empty())
         return name;
 
-    return folder_ + "/" + name;
+    return folder + "/" + name;
 }
 
 std::string StorageService::normalizeExtension(std::string ext)

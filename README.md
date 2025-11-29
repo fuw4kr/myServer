@@ -222,3 +222,33 @@ The system provides clearly structured routes. Most of them are protected by the
 | Serialization | JsonCpp |
 | Security | Bcrypt (Blowfish) |
 | Containerization | Docker |
+
+---
+
+## Documentation
+
+The documentation is generated using **Doxygen** and contains a complete description of all classes, methods, parameters, and usage examples.
+
+### Documentation Format
+
+Code comments use the tags:
+`@brief` `@param` `@return` `@throws` `@example`
+
+## Automatic Generation via GitHub Actions
+
+After every push to the `feature/docs-ci` branch:
+
+- a GitHub Action is triggered,
+
+- new HTML documentation is generated,
+
+- it is automatically published to GitHub Pages.
+
+Workflow file:
+
+`.github/workflows/docs.yml`
+
+## Online Documentation
+
+The official documentation page is available at:
+https://fuw4kr.github.io/myServer/

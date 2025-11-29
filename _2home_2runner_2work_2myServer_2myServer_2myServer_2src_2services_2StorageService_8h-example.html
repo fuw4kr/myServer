@@ -96,7 +96,9 @@ $(document).ready(function(){initNavTree('_2home_2runner_2work_2myServer_2myServ
 <p>Client for uploading files to Supabase Storage.The service is configured from the following environment variables:</p><ul>
 <li>SUPABASE_URL or SUPABASE_DB_URL (derive host) or SUPABASE_STORAGE_URL</li>
 <li>SUPABASE_SERVICE_ROLE_KEY / SUPABASE_SERVICE_KEY / SUPABASE_SERVICE_ROLE</li>
-<li>SUPABASE_STORAGE_BUCKET (required) and optional SUPABASE_STORAGE_AVATAR_FOLDER</li>
+<li>SUPABASE_STORAGE_BUCKET (required)</li>
+<li>optional SUPABASE_STORAGE_AVATAR_FOLDER (default "avatars")</li>
+<li>optional SUPABASE_STORAGE_UNKNOWN_FOLDER (default "unknown-faces")</li>
 <li>SUPABASE_STORAGE_SKIP_TLS_VERIFY / SUPABASE_SKIP_TLS_VERIFY (optional)</li>
 </ul>
 <p>When misconfigured, isConfigured returns false and uploads will fail fast.</p>
@@ -119,7 +121,11 @@ $(document).ready(function(){initNavTree('_2home_2runner_2work_2myServer_2myServ
 <div class="line">                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
 <div class="line">                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
 <div class="line"> </div>
-<div class="line">    <span class="keywordtype">bool</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">isConfigured</a>()<span class="keyword"> const</span></div>
+<div class="line">    <span class="keywordtype">void</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classStorageService.html#a4611b385c08439a49dfbd73cc444ae19">uploadUnknown</a>(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line">                       <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
+<div class="line">                       <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordtype">bool</span> <a id="a6" name="a6"></a><a class="code hl_function" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">isConfigured</a>()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
 <div class="line">        <span class="keywordflow">return</span> isReady_;</div>
 <div class="line">    }</div>
@@ -129,21 +135,27 @@ $(document).ready(function(){initNavTree('_2home_2runner_2work_2myServer_2myServ
 <div class="line">    std::string bucket_;</div>
 <div class="line">    std::string publicBaseUrl_;</div>
 <div class="line">    std::string folder_;</div>
+<div class="line">    std::string unknownFolder_;</div>
 <div class="line">    std::string serviceKey_;</div>
 <div class="line">    <span class="keywordtype">bool</span> isReady_{<span class="keyword">false</span>};</div>
 <div class="line"> </div>
-<div class="line">    std::string buildObjectPath(<span class="keyword">const</span> std::string&amp; extension) <span class="keyword">const</span>;</div>
+<div class="line">    std::string buildObjectPath(<span class="keyword">const</span> std::string&amp; folder, <span class="keyword">const</span> std::string&amp; extension) <span class="keyword">const</span>;</div>
+<div class="line">    <span class="keywordtype">void</span> uploadWithFolder(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line">                          <span class="keyword">const</span> std::string&amp; folder,</div>
+<div class="line">                          <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
+<div class="line">                          <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
 <div class="line">    <span class="keyword">static</span> std::string normalizeExtension(std::string ext);</div>
 <div class="line">    <span class="keyword">static</span> std::string mimeFromFile(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
 <div class="line">                                    <span class="keyword">const</span> std::string&amp; extension);</div>
 <div class="line">    <span class="keyword">static</span> std::string stripSlashes(<span class="keyword">const</span> std::string&amp; value);</div>
 <div class="line">};</div>
-<div class="ttc" id="aclassStorageService_html"><div class="ttname"><a href="classStorageService.html">StorageService</a></div><div class="ttdef"><b>Definition</b> StorageService.h:25</div></div>
-<div class="ttc" id="aclassStorageService_html_a0d9c4f190932fbc7a786269f43105f53"><div class="ttname"><a href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">StorageService::ErrorCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;message)&gt; ErrorCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:28</div></div>
-<div class="ttc" id="aclassStorageService_html_a3c4b8c30f89f90f3277053578464bbdb"><div class="ttname"><a href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">StorageService::uploadAvatar</a></div><div class="ttdeci">void uploadAvatar(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads a single avatar file to Supabase Storage.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:150</div></div>
-<div class="ttc" id="aclassStorageService_html_a8c0aaf4cd3c824ad15140f3cfa59d95c"><div class="ttname"><a href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">StorageService::isConfigured</a></div><div class="ttdeci">bool isConfigured() const</div><div class="ttdoc">Indicates whether the service initialized correctly.</div><div class="ttdef"><b>Definition</b> StorageService.h:48</div></div>
+<div class="ttc" id="aclassStorageService_html"><div class="ttname"><a href="classStorageService.html">StorageService</a></div><div class="ttdef"><b>Definition</b> StorageService.h:27</div></div>
+<div class="ttc" id="aclassStorageService_html_a0d9c4f190932fbc7a786269f43105f53"><div class="ttname"><a href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">StorageService::ErrorCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;message)&gt; ErrorCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:30</div></div>
+<div class="ttc" id="aclassStorageService_html_a3c4b8c30f89f90f3277053578464bbdb"><div class="ttname"><a href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">StorageService::uploadAvatar</a></div><div class="ttdeci">void uploadAvatar(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads a single avatar file to Supabase Storage.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:152</div></div>
+<div class="ttc" id="aclassStorageService_html_a4611b385c08439a49dfbd73cc444ae19"><div class="ttname"><a href="classStorageService.html#a4611b385c08439a49dfbd73cc444ae19">StorageService::uploadUnknown</a></div><div class="ttdeci">void uploadUnknown(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads an unknown-face snapshot to Supabase Storage using a dedicated folder.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:160</div></div>
+<div class="ttc" id="aclassStorageService_html_a8c0aaf4cd3c824ad15140f3cfa59d95c"><div class="ttname"><a href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">StorageService::isConfigured</a></div><div class="ttdeci">bool isConfigured() const</div><div class="ttdoc">Indicates whether the service initialized correctly.</div><div class="ttdef"><b>Definition</b> StorageService.h:57</div></div>
 <div class="ttc" id="aclassStorageService_html_aaadfd6bf6840fbefc618946100bbacec"><div class="ttname"><a href="classStorageService.html#aaadfd6bf6840fbefc618946100bbacec">StorageService::StorageService</a></div><div class="ttdeci">StorageService()</div><div class="ttdef"><b>Definition</b> StorageService.cpp:94</div></div>
-<div class="ttc" id="aclassStorageService_html_afea76372a098e0bc1648d0c8f83b2ede"><div class="ttname"><a href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">StorageService::SuccessCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;url)&gt; SuccessCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:27</div></div>
+<div class="ttc" id="aclassStorageService_html_afea76372a098e0bc1648d0c8f83b2ede"><div class="ttname"><a href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">StorageService::SuccessCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;url)&gt; SuccessCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:29</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

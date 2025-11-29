@@ -141,6 +141,7 @@ var NAVTREEINDEX0 =
 "classStorageService.html":[1,0,13],
 "classStorageService.html#a0d9c4f190932fbc7a786269f43105f53":[1,0,13,0],
 "classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb":[1,0,13,4],
+"classStorageService.html#a4611b385c08439a49dfbd73cc444ae19":[1,0,13,5],
 "classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c":[1,0,13,3],
 "classStorageService.html#aaadfd6bf6840fbefc618946100bbacec":[1,0,13,2],
 "classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede":[1,0,13,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "ow-crypt_8h.html#a7b709f65ba563484c8b090ddb4762871":[2,0,0,4,0,0,4,4],
 "ow-crypt_8h.html#a9fb2f1c0ca9acd3d70540b35e0ce6385":[2,0,0,4,0,0,4,6],
 "ow-crypt_8h.html#aa3c01e6d4f337ee59ab994ddd5fe9ac9":[2,0,0,4,0,0,4,5],
-"ow-crypt_8h.html#ac017062f1485e78fd9941b0c20753dcd":[2,0,0,4,0,0,4,2],
-"ow-crypt_8h.html#ad8d129162856993d07fdc07a1fd46e99":[2,0,0,4,0,0,4,3]
+"ow-crypt_8h.html#ac017062f1485e78fd9941b0c20753dcd":[2,0,0,4,0,0,4,2]
 };

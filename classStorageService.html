@@ -113,6 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c4b8c30f89f90f3277053578464bbdb" id="r_a3c4b8c30f89f90f3277053578464bbdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">uploadAvatar</a> (const drogon::HttpFile &amp;file, const <a class="el" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a> &amp;onSuccess, const <a class="el" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a> &amp;onError) const</td></tr>
 <tr class="memdesc:a3c4b8c30f89f90f3277053578464bbdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads a single avatar file to Supabase Storage.  <br /></td></tr>
 <tr class="separator:a3c4b8c30f89f90f3277053578464bbdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4611b385c08439a49dfbd73cc444ae19" id="r_a4611b385c08439a49dfbd73cc444ae19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageService.html#a4611b385c08439a49dfbd73cc444ae19">uploadUnknown</a> (const drogon::HttpFile &amp;file, const <a class="el" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a> &amp;onSuccess, const <a class="el" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a> &amp;onError) const</td></tr>
+<tr class="memdesc:a4611b385c08439a49dfbd73cc444ae19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads an unknown-face snapshot to Supabase Storage using a dedicated folder.  <br /></td></tr>
+<tr class="separator:a4611b385c08439a49dfbd73cc444ae19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c0aaf4cd3c824ad15140f3cfa59d95c" id="r_a8c0aaf4cd3c824ad15140f3cfa59d95c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">isConfigured</a> () const</td></tr>
 <tr class="memdesc:a8c0aaf4cd3c824ad15140f3cfa59d95c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether the service initialized correctly.  <br /></td></tr>
 <tr class="separator:a8c0aaf4cd3c824ad15140f3cfa59d95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,7 +202,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Indicates whether the service initialized correctly. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if ready to upload, false otherwise. </dd></dl>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2services_2StorageService_8h-example.html#a5">/home/runner/work/myServer/myServer/myServer/src/services/StorageService.h</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2services_2StorageService_8h-example.html#a6">/home/runner/work/myServer/myServer/myServer/src/services/StorageService.h</a>.</dd>
 </dl>
 
 </div>
@@ -247,6 +250,44 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2services_2StorageService_8h-example.html#a4">/home/runner/work/myServer/myServer/myServer/src/services/StorageService.h</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="a4611b385c08439a49dfbd73cc444ae19" name="a4611b385c08439a49dfbd73cc444ae19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4611b385c08439a49dfbd73cc444ae19">&#9670;&#160;</a></span>uploadUnknown()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void StorageService::uploadUnknown </td>
+          <td>(</td>
+          <td class="paramtype">const drogon::HttpFile &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onSuccess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onError</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Uploads an unknown-face snapshot to Supabase Storage using a dedicated folder. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2services_2StorageService_8h-example.html#a5">/home/runner/work/myServer/myServer/myServer/src/services/StorageService.h</a>.</dd>
 </dl>
 
 </div>

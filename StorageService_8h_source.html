@@ -103,47 +103,57 @@ $(document).ready(function(){initNavTree('StorageService_8h_source.html',''); in
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classStorageService.html">   24</a></span><span class="keyword">class </span><a class="code hl_class" href="classStorageService.html">StorageService</a></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>{</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">   27</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a> = std::function&lt;void(<span class="keyword">const</span> std::string&amp; url)&gt;;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">   28</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a> = std::function&lt;void(<span class="keyword">const</span> std::string&amp; message)&gt;;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_function" href="classStorageService.html#aaadfd6bf6840fbefc618946100bbacec">StorageService</a>();</div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classStorageService.html">   26</a></span><span class="keyword">class </span><a class="code hl_class" href="classStorageService.html">StorageService</a></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>{</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">   29</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a> = std::function&lt;void(<span class="keyword">const</span> std::string&amp; url)&gt;;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">   30</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a> = std::function&lt;void(<span class="keyword">const</span> std::string&amp; message)&gt;;</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">uploadAvatar</a>(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">   48</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">isConfigured</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">return</span> isReady_;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
-</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_function" href="classStorageService.html#aaadfd6bf6840fbefc618946100bbacec">StorageService</a>();</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">uploadAvatar</a>(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                      <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classStorageService.html#a4611b385c08439a49dfbd73cc444ae19">uploadUnknown</a>(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                       <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                       <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    drogon::HttpClientPtr client_;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    std::string bucket_;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::string publicBaseUrl_;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::string folder_;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::string serviceKey_;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">bool</span> isReady_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    std::string buildObjectPath(<span class="keyword">const</span> std::string&amp; extension) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">static</span> std::string normalizeExtension(std::string ext);</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">static</span> std::string mimeFromFile(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                                    <span class="keyword">const</span> std::string&amp; extension);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">static</span> std::string stripSlashes(<span class="keyword">const</span> std::string&amp; value);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>};</div>
+<div class="foldopen" id="foldopen00057" data-start="{" data-end="}">
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">   57</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">isConfigured</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">return</span> isReady_;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
 </div>
-<div class="ttc" id="aclassStorageService_html"><div class="ttname"><a href="classStorageService.html">StorageService</a></div><div class="ttdef"><b>Definition</b> StorageService.h:25</div></div>
-<div class="ttc" id="aclassStorageService_html_a0d9c4f190932fbc7a786269f43105f53"><div class="ttname"><a href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">StorageService::ErrorCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;message)&gt; ErrorCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:28</div></div>
-<div class="ttc" id="aclassStorageService_html_a3c4b8c30f89f90f3277053578464bbdb"><div class="ttname"><a href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">StorageService::uploadAvatar</a></div><div class="ttdeci">void uploadAvatar(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads a single avatar file to Supabase Storage.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:150</div></div>
-<div class="ttc" id="aclassStorageService_html_a8c0aaf4cd3c824ad15140f3cfa59d95c"><div class="ttname"><a href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">StorageService::isConfigured</a></div><div class="ttdeci">bool isConfigured() const</div><div class="ttdoc">Indicates whether the service initialized correctly.</div><div class="ttdef"><b>Definition</b> StorageService.h:48</div></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    drogon::HttpClientPtr client_;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    std::string bucket_;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    std::string publicBaseUrl_;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::string folder_;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    std::string unknownFolder_;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    std::string serviceKey_;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">bool</span> isReady_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    std::string buildObjectPath(<span class="keyword">const</span> std::string&amp; folder, <span class="keyword">const</span> std::string&amp; extension) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">void</span> uploadWithFolder(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                          <span class="keyword">const</span> std::string&amp; folder,</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                          <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">SuccessCallback</a>&amp; onSuccess,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                          <span class="keyword">const</span> <a class="code hl_typedef" href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">ErrorCallback</a>&amp; onError) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keyword">static</span> std::string normalizeExtension(std::string ext);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keyword">static</span> std::string mimeFromFile(<span class="keyword">const</span> drogon::HttpFile&amp; file,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                                    <span class="keyword">const</span> std::string&amp; extension);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keyword">static</span> std::string stripSlashes(<span class="keyword">const</span> std::string&amp; value);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>};</div>
+</div>
+<div class="ttc" id="aclassStorageService_html"><div class="ttname"><a href="classStorageService.html">StorageService</a></div><div class="ttdef"><b>Definition</b> StorageService.h:27</div></div>
+<div class="ttc" id="aclassStorageService_html_a0d9c4f190932fbc7a786269f43105f53"><div class="ttname"><a href="classStorageService.html#a0d9c4f190932fbc7a786269f43105f53">StorageService::ErrorCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;message)&gt; ErrorCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:30</div></div>
+<div class="ttc" id="aclassStorageService_html_a3c4b8c30f89f90f3277053578464bbdb"><div class="ttname"><a href="classStorageService.html#a3c4b8c30f89f90f3277053578464bbdb">StorageService::uploadAvatar</a></div><div class="ttdeci">void uploadAvatar(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads a single avatar file to Supabase Storage.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:152</div></div>
+<div class="ttc" id="aclassStorageService_html_a4611b385c08439a49dfbd73cc444ae19"><div class="ttname"><a href="classStorageService.html#a4611b385c08439a49dfbd73cc444ae19">StorageService::uploadUnknown</a></div><div class="ttdeci">void uploadUnknown(const drogon::HttpFile &amp;file, const SuccessCallback &amp;onSuccess, const ErrorCallback &amp;onError) const</div><div class="ttdoc">Uploads an unknown-face snapshot to Supabase Storage using a dedicated folder.</div><div class="ttdef"><b>Definition</b> StorageService.cpp:160</div></div>
+<div class="ttc" id="aclassStorageService_html_a8c0aaf4cd3c824ad15140f3cfa59d95c"><div class="ttname"><a href="classStorageService.html#a8c0aaf4cd3c824ad15140f3cfa59d95c">StorageService::isConfigured</a></div><div class="ttdeci">bool isConfigured() const</div><div class="ttdoc">Indicates whether the service initialized correctly.</div><div class="ttdef"><b>Definition</b> StorageService.h:57</div></div>
 <div class="ttc" id="aclassStorageService_html_aaadfd6bf6840fbefc618946100bbacec"><div class="ttname"><a href="classStorageService.html#aaadfd6bf6840fbefc618946100bbacec">StorageService::StorageService</a></div><div class="ttdeci">StorageService()</div><div class="ttdef"><b>Definition</b> StorageService.cpp:94</div></div>
-<div class="ttc" id="aclassStorageService_html_afea76372a098e0bc1648d0c8f83b2ede"><div class="ttname"><a href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">StorageService::SuccessCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;url)&gt; SuccessCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:27</div></div>
+<div class="ttc" id="aclassStorageService_html_afea76372a098e0bc1648d0c8f83b2ede"><div class="ttname"><a href="classStorageService.html#afea76372a098e0bc1648d0c8f83b2ede">StorageService::SuccessCallback</a></div><div class="ttdeci">std::function&lt; void(const std::string &amp;url)&gt; SuccessCallback</div><div class="ttdef"><b>Definition</b> StorageService.h:29</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

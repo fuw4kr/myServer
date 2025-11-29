@@ -1,3 +1,6 @@
+/**
+ * @brief DashboardController implementation aggregating metrics for the UI.
+ */
 #include "DashboardController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -22,6 +25,11 @@ DashboardController::DashboardController(const DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns dashboard counts and summaries.
+ * @param req Incoming request (unused).
+ * @param callback Response callback with dashboard JSON payload.
+ */
 void DashboardController::getDashboard(const HttpRequestPtr& req,
                                        std::function<void(const HttpResponsePtr&)>&& callback)
 {
@@ -215,6 +223,10 @@ void DashboardController::getDashboard(const HttpRequestPtr& req,
         });
 }
 
+/**
+ * @brief Determines whether AI engine is considered active based on environment flag.
+ * @return true if enabled or unspecified; false when AI_ENGINE_ENABLED is falsy.
+ */
 bool DashboardController::aiActive() const
 {
     const char* env = std::getenv("AI_ENGINE_ENABLED");

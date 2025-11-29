@@ -1,3 +1,6 @@
+/**
+ * @brief PersonController implementation for CRUD operations and avatar uploads.
+ */
 #include "PersonController.h"
 #include <drogon/MultiPart.h>
 #include <drogon/drogon.h>
@@ -51,6 +54,11 @@ PersonController::PersonController(const drogon::orm::DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns the list of persons.
+ * @param req Incoming request.
+ * @param callback Response callback.
+ */
 void PersonController::getPersons(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -58,6 +66,11 @@ void PersonController::getPersons(
     fetchTable(req, std::move(callback));
 }
 
+/**
+ * @brief Creates a new person row.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ */
 void PersonController::createPerson(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -108,6 +121,12 @@ void PersonController::createPerson(
     }
 }
 
+/**
+ * @brief Updates an existing person by id.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ * @param id Person identifier.
+ */
 void PersonController::updatePerson(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,
@@ -165,6 +184,12 @@ void PersonController::updatePerson(
     }
 }
 
+/**
+ * @brief Deletes a person by id.
+ * @param req Incoming request (unused).
+ * @param callback Response callback.
+ * @param id Person identifier.
+ */
 void PersonController::deletePerson(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,
@@ -213,6 +238,12 @@ void PersonController::deletePerson(
     tableRepository_->deleteById(id, onSuccess, onError);
 }
 
+/**
+ * @brief Uploads an avatar image and persists the resulting URL.
+ * @param req Multipart/form-data request containing the file.
+ * @param callback Response callback.
+ * @param id Person identifier.
+ */
 void PersonController::uploadAvatar(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,

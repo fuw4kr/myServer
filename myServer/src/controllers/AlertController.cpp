@@ -1,3 +1,6 @@
+/**
+ * @brief AlertController implementation for listing and creating alerts.
+ */
 #include "AlertController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -37,6 +40,11 @@ AlertController::AlertController(const drogon::orm::DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns latest alerts ordered by created_at.
+ * @param req Incoming request.
+ * @param callback Response callback.
+ */
 void AlertController::getAlerts(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -44,6 +52,11 @@ void AlertController::getAlerts(
     fetchTable(req, std::move(callback));
 }
 
+/**
+ * @brief Inserts a new alert row.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ */
 void AlertController::createAlert(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)

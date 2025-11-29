@@ -1,3 +1,6 @@
+/**
+ * @brief Implements user lookup and token update queries for authentication.
+ */
 #include "UserRepository.h"
 
 #include <stdexcept>
@@ -13,6 +16,12 @@ UserRepository::UserRepository(const DbClientPtr& db)
     }
 }
 
+/**
+ * @brief Finds a user by email.
+ * @param email Target email address.
+ * @param onSuccess Invoked with query result (empty when not found).
+ * @param onError Invoked on DB error.
+ */
 void UserRepository::findByEmail(
     const std::string& email,
     const ResultCallback& onSuccess,
@@ -25,6 +34,14 @@ void UserRepository::findByEmail(
         email);
 }
 
+/**
+ * @brief Updates token and expiry for a user.
+ * @param userId User identifier.
+ * @param token Session token.
+ * @param expiresAt Expiration timestamp.
+ * @param onSuccess Invoked with updated row.
+ * @param onError Invoked on DB error.
+ */
 void UserRepository::updateToken(
     const std::string& userId,
     const std::string& token,
@@ -41,6 +58,15 @@ void UserRepository::updateToken(
         expiresAt);
 }
 
+/**
+ * @brief Updates token, password hash, and expiry for a user.
+ * @param userId User identifier.
+ * @param token New session token.
+ * @param passwordHash Hashed password.
+ * @param expiresAt Expiration timestamp.
+ * @param onSuccess Invoked with updated row.
+ * @param onError Invoked on DB error.
+ */
 void UserRepository::updateTokenWithPassword(
     const std::string& userId,
     const std::string& token,
@@ -59,6 +85,12 @@ void UserRepository::updateTokenWithPassword(
         expiresAt);
 }
 
+/**
+ * @brief Looks up a user by active session token.
+ * @param token Session token string.
+ * @param onSuccess Invoked with query result (empty when not found).
+ * @param onError Invoked on DB error.
+ */
 void UserRepository::findByToken(
     const std::string& token,
     const ResultCallback& onSuccess,

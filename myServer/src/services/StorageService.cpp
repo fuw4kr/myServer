@@ -1,3 +1,6 @@
+/**
+ * @brief Supabase Storage client implementation for avatar uploads.
+ */
 #include "StorageService.h"
 
 #include <drogon/drogon.h>

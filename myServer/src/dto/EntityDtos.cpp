@@ -1,3 +1,6 @@
+/**
+ * @brief DTO mappers converting database rows into JSON payloads.
+ */
 #include "EntityDtos.h"
 
 #include <algorithm>

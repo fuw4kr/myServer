@@ -2,6 +2,14 @@
 #include <drogon/HttpController.h>
 #include <drogon/orm/DbClient.h>
 
+/**
+ * @brief Returns dashboard metrics and feature flags.
+ *
+ * GET /api/dashboard aggregates counts and AI status for the UI.
+ *
+ * @example
+ * // HTTP: GET /api/dashboard
+ */
 class DashboardController : public drogon::HttpController<DashboardController, false>
 {
 public:
@@ -11,6 +19,9 @@ public:
 
     explicit DashboardController(const drogon::orm::DbClientPtr& db);
 
+    /// @brief Returns dashboard statistics payload.
+    /// @param req Incoming request.
+    /// @param callback Response callback returning JSON counts/status.
     void getDashboard(const drogon::HttpRequestPtr& req,
                       std::function<void(const drogon::HttpResponsePtr&)>&& callback);
 

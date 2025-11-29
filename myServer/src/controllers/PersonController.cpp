@@ -1,4 +1,5 @@
 #include "PersonController.h"
+#include <drogon/MultiPart.h>
 #include <drogon/drogon.h>
 #include <json/json.h>
 #include "../dto/EntityDtos.h"
@@ -45,7 +46,8 @@ PersonController::PersonController(const drogon::orm::DbClientPtr& db)
                           "persons",
                           "id",
                           dto::PersonDto::columns(),
-                          dto::PersonDto::fromRow)
+                          dto::PersonDto::fromRow),
+      storageService_(std::make_shared<StorageService>())
 {
 }
 
@@ -209,4 +211,82 @@ void PersonController::deletePerson(
     };
 
     tableRepository_->deleteById(id, onSuccess, onError);
+}
+
+void PersonController::uploadAvatar(
+    const drogon::HttpRequestPtr& req,
+    std::function<void(const drogon::HttpResponsePtr&)>&& callback,
+    std::string id)
+{
+    if (id.empty())
+    {
+        callback(makeErrorResponse(drogon::k400BadRequest, "Person id is required"));
+        return;
+    }
+
+    if (!storageService_ || !storageService_->isConfigured())
+    {
+        callback(makeErrorResponse(drogon::k500InternalServerError, "Storage service is not configured"));
+        return;
+    }
+
+    drogon::MultiPartParser parser;
+    if (parser.parse(req) != 0)
+    {
+        callback(makeErrorResponse(drogon::k400BadRequest, "Invalid multipart/form-data payload"));
+        return;
+    }
+
+    const auto& files = parser.getFiles();
+    if (files.empty())
+    {
+        callback(makeErrorResponse(drogon::k400BadRequest, "Avatar file is missing"));
+        return;
+    }
+
+    drogon::HttpFile file = files.front();
+    auto cb = std::move(callback);
+    auto personId = std::move(id);
+
+    storageService_->uploadAvatar(
+        file,
+        [this, cb, personId](const std::string& url) mutable
+        {
+            Json::Value payload;
+            payload["image_url"] = url;
+
+            auto onSuccess = [cb, repo = tableRepository_](const drogon::orm::Result& res) mutable
+            {
+                if (res.empty())
+                {
+                    cb(makeErrorResponse(drogon::k404NotFound, "Person not found"));
+                    return;
+                }
+
+                auto resp = drogon::HttpResponse::newHttpJsonResponse(repo->toJsonObject(res));
+                resp->setStatusCode(drogon::k200OK);
+                cb(resp);
+            };
+
+            auto onError = [cb](const std::exception_ptr& ex) mutable
+            {
+                std::string msg = "Database error";
+                try
+                {
+                    if (ex)
+                        std::rethrow_exception(ex);
+                }
+                catch (const std::exception& e)
+                {
+                    msg = e.what();
+                }
+                cb(makeErrorResponse(drogon::k500InternalServerError, msg));
+            };
+
+            tableRepository_->updateById(personId, payload, personUpdateColumns(), onSuccess, onError);
+        },
+        [cb](const std::string& message) mutable
+        {
+            cb(makeErrorResponse(drogon::k502BadGateway, message));
+        });
 }

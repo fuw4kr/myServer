@@ -48,6 +48,8 @@ add_executable(${PROJECT_NAME}
     src/repositories/TableRepository.cpp
     src/repositories/UserRepository.h
     src/repositories/UserRepository.cpp
+    src/services/StorageService.h
+    src/services/StorageService.cpp
     src/security/PasswordHasher.cpp
     src/security/PasswordHasher.h
     src/security/bcrypt/bcrypt.c

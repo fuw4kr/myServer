@@ -1,3 +1,6 @@
+/**
+ * @brief CameraController implementation for CRUD operations on cameras.
+ */
 #include "CameraController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -49,6 +52,11 @@ CameraController::CameraController(const drogon::orm::DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns the list of cameras.
+ * @param req Incoming request.
+ * @param callback Response callback.
+ */
 void CameraController::getCameras(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -56,6 +64,11 @@ void CameraController::getCameras(
     fetchTable(req, std::move(callback));
 }
 
+/**
+ * @brief Creates a new camera record.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ */
 void CameraController::createCamera(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -106,6 +119,12 @@ void CameraController::createCamera(
     }
 }
 
+/**
+ * @brief Updates an existing camera by id.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ * @param id Camera identifier.
+ */
 void CameraController::updateCamera(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,
@@ -163,6 +182,12 @@ void CameraController::updateCamera(
     }
 }
 
+/**
+ * @brief Deletes a camera by id.
+ * @param req Incoming request (unused).
+ * @param callback Response callback.
+ * @param id Camera identifier.
+ */
 void CameraController::deleteCamera(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,

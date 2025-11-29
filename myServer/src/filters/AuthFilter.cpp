@@ -1,9 +1,19 @@
+/**
+ * @brief Bearer token authorization filter implementation.
+ */
 #include "AuthFilter.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
 
 using namespace drogon;
 
+/**
+ * @brief Rejects if Authorization header is missing/invalid; otherwise lets the chain continue.
+ * @param req Incoming HTTP request.
+ * @param fcb Callback for rejection with HTTP response.
+ * @param fccb Callback to continue the chain when authorized.
+ * @return void
+ */
 void AuthFilter::doFilter(
     const HttpRequestPtr& req,
     FilterCallback&& fcb,

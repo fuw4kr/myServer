@@ -4,6 +4,13 @@
 #include <memory>
 #include "../repositories/UserRepository.h"
 
+/**
+ * @brief Simple bearer-token authorization filter.
+ *
+ * Validates `Authorization: Bearer <token>` against stored session tokens.
+ * @example
+ * app().registerFilter(std::make_shared<AuthFilter>(db));
+ */
 class AuthFilter : public drogon::HttpFilter<AuthFilter, false>
 {
 public:
@@ -14,6 +21,13 @@ public:
     {
     }
 
+    /**
+     * @brief Validates bearer token and either fails the request or continues the chain.
+     * @param req Incoming HTTP request with Authorization header.
+     * @param fcb Callback invoked when the request should be blocked.
+     * @param fccb Callback invoked when the request is authorized and should proceed.
+     * @return void
+     */
     void doFilter(
         const drogon::HttpRequestPtr& req,
         drogon::FilterCallback&& fcb,

@@ -1,3 +1,6 @@
+/**
+ * @brief EmbeddingController implementation for listing and creating embeddings.
+ */
 #include "EmbeddingController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -35,6 +38,11 @@ EmbeddingController::EmbeddingController(const drogon::orm::DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns recent embeddings.
+ * @param req Incoming request.
+ * @param callback Response callback.
+ */
 void EmbeddingController::getEmbeddings(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -42,6 +50,11 @@ void EmbeddingController::getEmbeddings(
     fetchTable(req, std::move(callback));
 }
 
+/**
+ * @brief Inserts a new embedding row.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ */
 void EmbeddingController::createEmbedding(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)

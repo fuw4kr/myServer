@@ -1,3 +1,6 @@
+/**
+ * @brief AuthController implementation handling login/token issuance.
+ */
 #include "AuthController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -47,6 +50,11 @@ AuthController::AuthController(const DbClientPtr& db)
         throw std::invalid_argument("AuthController failed to initialize repository");
 }
 
+/**
+ * @brief Authenticates a user and returns a session token.
+ * @param req Incoming request containing JSON with email and password.
+ * @param callback Response callback with token or error payload.
+ */
 void AuthController::login(
     const HttpRequestPtr& req,
     std::function<void(const HttpResponsePtr&)>&& callback)

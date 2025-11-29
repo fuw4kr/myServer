@@ -1,3 +1,6 @@
+/**
+ * @brief Implements CRUD helpers for simple tables using Drogon ORM.
+ */
 #include "TableRepository.h"
 
 #include <algorithm>

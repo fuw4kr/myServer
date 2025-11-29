@@ -1,9 +1,17 @@
+/**
+ * @brief RootController implementation providing health and endpoint discovery.
+ */
 #include "RootController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
 
 using namespace drogon;
 
+/**
+ * @brief Returns service status and list of endpoints.
+ * @param req Incoming request (unused).
+ * @param callback Response callback with JSON body.
+ */
 void RootController::root(
     const HttpRequestPtr& req,
     std::function<void(const HttpResponsePtr&)>&& callback) const

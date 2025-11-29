@@ -1,3 +1,6 @@
+/**
+ * @brief Aggregates latest records from multiple repositories into one payload.
+ */
 #include "AllController.h"
 #include <drogon/drogon.h>
 #include <stdexcept>
@@ -16,6 +19,11 @@ AllController::AllController(const DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns combined latest rows for persons, cameras, events, alerts, system logs, and embeddings.
+ * @param req Incoming request (unused).
+ * @param callback Response callback with aggregated JSON.
+ */
 void AllController::getAll(
     const HttpRequestPtr& req,
     std::function<void(const HttpResponsePtr&)>&& callback)

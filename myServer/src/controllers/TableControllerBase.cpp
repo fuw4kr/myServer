@@ -1,3 +1,6 @@
+/**
+ * @brief Shared implementation helpers for read-only table controllers.
+ */
 #include "TableControllerBase.h"
 #include <drogon/drogon.h>
 #include <stdexcept>
@@ -6,6 +9,10 @@
 using namespace drogon;
 using namespace drogon::orm;
 
+/**
+ * @brief Constructs the base with a configured TableRepository.
+ * @throws std::invalid_argument when repository initialization fails.
+ */
 TableControllerBase::TableControllerBase(const DbClientPtr& db,
                                          std::string tableName,
                                          std::string orderByColumn,
@@ -26,6 +33,11 @@ TableControllerBase::TableControllerBase(const DbClientPtr& db,
     }
 }
 
+/**
+ * @brief Executes a latest-N query and returns JSON to the caller.
+ * @param req Incoming request (unused).
+ * @param callback Response callback.
+ */
 void TableControllerBase::fetchTable(
     const HttpRequestPtr& req,
     Callback callback) const

@@ -1,3 +1,6 @@
+/**
+ * @brief EventController implementation for listing and creating events.
+ */
 #include "EventController.h"
 #include <drogon/drogon.h>
 #include <json/json.h>
@@ -37,6 +40,11 @@ EventController::EventController(const drogon::orm::DbClientPtr& db)
 {
 }
 
+/**
+ * @brief Returns recent events ordered by timestamp.
+ * @param req Incoming request.
+ * @param callback Response callback.
+ */
 void EventController::getEvents(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)
@@ -44,6 +52,11 @@ void EventController::getEvents(
     fetchTable(req, std::move(callback));
 }
 
+/**
+ * @brief Inserts a new event row.
+ * @param req Incoming request with JSON payload.
+ * @param callback Response callback.
+ */
 void EventController::createEvent(
     const drogon::HttpRequestPtr& req,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback)

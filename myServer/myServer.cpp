@@ -1,3 +1,10 @@
+/**
+ * @brief Application entry point configuring Drogon controllers and filters.
+ *
+ * Expects SUPABASE_DB_URL for Postgres connectivity and optional PORT for listener.
+ * @example
+ * SUPABASE_DB_URL=postgres://... PORT=9000 ./myServer
+ */
 #include <drogon/drogon.h>
 #include <drogon/orm/DbClient.h>
 #include <cstdlib>
@@ -17,6 +24,10 @@
 using namespace drogon;
 using namespace drogon::orm;
 
+/**
+ * @brief Boots the Drogon application, wires controllers and filters, then starts listening.
+ * @return Exit code (0 on success, 1 on missing DB configuration).
+ */
 int main()
 {
     LOG_INFO << "Starting Drogon server...";

@@ -1,6 +1,8 @@
-﻿// myServer.h : Include file for standard system include files,
-// or project specific include files.
-
+/**
+ * @brief PCH-style header for the myServer application.
+ *
+ * Extend with shared includes needed across translation units.
+ */
 #pragma once
 
 #include <iostream>

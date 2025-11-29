@@ -1,0 +1,26 @@
+var examples =
+[
+    [ "/home/runner/work/myServer/myServer/myServer/myServer.cpp", "_2home_2runner_2work_2myServer_2myServer_2myServer_2myServer_8cpp-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/AllController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2AllController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/AuthController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2AuthController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/CameraController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2CameraController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/DashboardController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2DashboardController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/EmbeddingController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2EmbeddingController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/EventController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2EventController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/PersonController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2PersonController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/RootController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2RootController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/SystemLogController.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2SystemLogController_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/controllers/TableControllerBase.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2controllers_2TableControllerBase_8h-example.html", null ],
+    [ "dto::PersonDto::fromRow", "dto_1_1PersonDto_1_1fromRow-example.html", null ],
+    [ "dto::CameraDto::fromRow", "dto_1_1CameraDto_1_1fromRow-example.html", null ],
+    [ "dto::EventDto::fromRow", "dto_1_1EventDto_1_1fromRow-example.html", null ],
+    [ "dto::AlertDto::fromRow", "dto_1_1AlertDto_1_1fromRow-example.html", null ],
+    [ "dto::SystemLogDto::fromRow", "dto_1_1SystemLogDto_1_1fromRow-example.html", null ],
+    [ "dto::EmbeddingDto::fromRow", "dto_1_1EmbeddingDto_1_1fromRow-example.html", null ],
+    [ "dto::UserDto::fromRow", "dto_1_1UserDto_1_1fromRow-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/filters/AuthFilter.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2filters_2AuthFilter_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/repositories/TableRepository.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2repositories_2TableRepository_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/repositories/UserRepository.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2repositories_2UserRepository_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/security/PasswordHasher.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2security_2PasswordHasher_8h-example.html", null ],
+    [ "/home/runner/work/myServer/myServer/myServer/src/services/StorageService.h", "_2home_2runner_2work_2myServer_2myServer_2myServer_2src_2services_2StorageService_8h-example.html", null ]
+];

@@ -11,6 +11,7 @@
 #include "src/controllers/PersonController.h"
 #include "src/controllers/RootController.h"
 #include "src/controllers/SystemLogController.h"
+#include "src/controllers/DashboardController.h"
 #include "src/filters/AuthFilter.h"
 
 using namespace drogon;
@@ -57,6 +58,7 @@ int main()
     app().registerController(std::make_shared<SystemLogController>(db));
     app().registerController(std::make_shared<EmbeddingController>(db));
     app().registerController(std::make_shared<AllController>(db));
+    app().registerController(std::make_shared<DashboardController>(db));
     app().registerController(std::make_shared<RootController>());
 
     uint16_t port = 8080;

@@ -5,9 +5,39 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
+#include <string_view>
 
 namespace
 {
+std::string getEnv(const char* name)
+{
+    const char* val = std::getenv(name);
+    return val ? std::string(val) : std::string();
+}
+
+std::string trimWhitespace(std::string value)
+{
+    auto isSpace = [](unsigned char c) {
+        return std::isspace(c) != 0;
+    };
+    while (!value.empty() && isSpace(static_cast<unsigned char>(value.front())))
+        value.erase(value.begin());
+    while (!value.empty() && isSpace(static_cast<unsigned char>(value.back())))
+        value.pop_back();
+    return value;
+}
+
+bool isTruthy(const std::string& value)
+{
+    if (value.empty())
+        return false;
+    std::string lower = value;
+    std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+    return lower == "1" || lower == "true" || lower == "yes" || lower == "on";
+}
+
 std::string toLower(std::string value)
 {
     std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
@@ -60,26 +90,34 @@ std::string deriveBaseUrl(const char* urlEnv, const char* dbUrlEnv)
 
 StorageService::StorageService()
 {
-    const char* urlEnv = std::getenv("SUPABASE_URL");
-    const char* dbUrlEnv = std::getenv("SUPABASE_DB_URL");
-    const char* keyEnv = std::getenv("SUPABASE_SERVICE_ROLE_KEY");
-    if (!keyEnv)
-        keyEnv = std::getenv("SUPABASE_SERVICE_KEY");
-    if (!keyEnv)
-        keyEnv = std::getenv("SUPABASE_SERVICE_ROLE");
-    const char* bucketEnv = std::getenv("SUPABASE_STORAGE_BUCKET");
-    const char* folderEnv = std::getenv("SUPABASE_STORAGE_AVATAR_FOLDER");
+    const std::string urlEnv = trimWhitespace(getEnv("SUPABASE_URL"));
+    const std::string storageUrlEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_URL"));
+    const std::string dbUrlEnv = trimWhitespace(getEnv("SUPABASE_DB_URL"));
+    std::string keyEnv = trimWhitespace(getEnv("SUPABASE_SERVICE_ROLE_KEY"));
+    if (keyEnv.empty())
+        keyEnv = trimWhitespace(getEnv("SUPABASE_SERVICE_KEY"));
+    if (keyEnv.empty())
+        keyEnv = trimWhitespace(getEnv("SUPABASE_SERVICE_ROLE"));
+    const std::string bucketEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_BUCKET"));
+    const std::string folderEnv = trimWhitespace(getEnv("SUPABASE_STORAGE_AVATAR_FOLDER"));
+    const bool skipTlsVerify = isTruthy(trimWhitespace(getEnv("SUPABASE_STORAGE_SKIP_TLS_VERIFY"))) ||
+                               isTruthy(trimWhitespace(getEnv("SUPABASE_SKIP_TLS_VERIFY")));
 
-    std::string baseUrl = deriveBaseUrl(urlEnv, dbUrlEnv);
-    if (baseUrl.empty() || !keyEnv || !bucketEnv)
+    std::string baseUrl = storageUrlEnv.empty() ? deriveBaseUrl(urlEnv.c_str(), dbUrlEnv.c_str())
+                                                : trimTrailingSlash(storageUrlEnv);
+    if (baseUrl.empty() || keyEnv.empty() || bucketEnv.empty())
     {
         LOG_ERROR << "Supabase storage env vars are missing: SUPABASE_URL (or SUPABASE_DB_URL to derive), "
                   << "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_SERVICE_KEY/SUPABASE_SERVICE_ROLE, SUPABASE_STORAGE_BUCKET";
+        LOG_ERROR << "Detected: url=" << (baseUrl.empty() ? "missing" : "present")
+                  << ", key=" << (keyEnv.empty() ? "missing" : "present")
+                  << " (len=" << keyEnv.size() << ")"
+                  << ", bucket=" << (bucketEnv.empty() ? "missing" : "present");
         return;
     }
 
     bucket_ = stripSlashes(bucketEnv);
-    folder_ = stripSlashes(folderEnv ? folderEnv : "avatars");
+    folder_ = stripSlashes(folderEnv.empty() ? "avatars" : folderEnv);
     serviceKey_ = keyEnv;
 
     if (bucket_.empty())
@@ -88,13 +126,21 @@ StorageService::StorageService()
         return;
     }
 
-    client_ = drogon::HttpClient::newHttpClient(baseUrl);
+    client_ = drogon::HttpClient::newHttpClient(baseUrl, nullptr, false, !skipTlsVerify);
+    if (skipTlsVerify)
+    {
+        LOG_WARN << "Supabase storage TLS verification disabled via SUPABASE_STORAGE_SKIP_TLS_VERIFY/SUPABASE_SKIP_TLS_VERIFY";
+    }
     publicBaseUrl_ = baseUrl + "/storage/v1/object/public/" + bucket_;
     isReady_ = static_cast<bool>(client_);
 
     if (!isReady_)
     {
         LOG_ERROR << "Failed to create Supabase HttpClient";
+    }
+    else
+    {
+        LOG_INFO << "Supabase storage configured for bucket '" << bucket_ << "' with base " << baseUrl;
     }
 }
 

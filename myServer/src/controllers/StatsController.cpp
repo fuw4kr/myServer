@@ -159,7 +159,8 @@ void StatsController::getSummary(
 
     db_->execSqlAsync(
         "SELECT COUNT(*) AS count FROM events "
-        "WHERE event_type='detection' AND timestamp >= date_trunc('day', now())",
+        "WHERE event_type='detect_start' "
+        "AND timestamp >= date_trunc('day', now())",
         [shared, finish](const Result& r)
         {
             shared->body["detectionsToday"] = static_cast<Json::Int64>(getInt64(r, 0, "count"));
@@ -286,7 +287,7 @@ void StatsController::getDetectionsByHour(
         db_->execSqlAsync(
             "SELECT EXTRACT(HOUR FROM timestamp) AS hour, COUNT(*) AS count "
             "FROM events "
-            "WHERE event_type='detection' "
+            "WHERE event_type='detect_start' "
             "AND timestamp >= $1::date "
             "AND timestamp < ($1::date + INTERVAL '1 day') "
             "GROUP BY 1",
@@ -299,7 +300,8 @@ void StatsController::getDetectionsByHour(
         db_->execSqlAsync(
             "SELECT EXTRACT(HOUR FROM timestamp) AS hour, COUNT(*) AS count "
             "FROM events "
-            "WHERE event_type='detection' AND timestamp >= date_trunc('day', now()) "
+            "WHERE event_type='detect_start' "
+            "AND timestamp >= date_trunc('day', now()) "
             "GROUP BY 1",
             onSuccess,
             onError);

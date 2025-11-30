@@ -17,6 +17,7 @@
 #include "src/controllers/EventController.h"
 #include "src/controllers/PersonController.h"
 #include "src/controllers/RootController.h"
+#include "src/controllers/StatsController.h"
 #include "src/controllers/SystemLogController.h"
 #include "src/controllers/DashboardController.h"
 #include "src/filters/AuthFilter.h"
@@ -70,6 +71,7 @@ int main()
     app().registerController(std::make_shared<EmbeddingController>(db));
     app().registerController(std::make_shared<AllController>(db));
     app().registerController(std::make_shared<DashboardController>(db));
+    app().registerController(std::make_shared<StatsController>(db));
     app().registerController(std::make_shared<RootController>());
 
     uint16_t port = 8080;

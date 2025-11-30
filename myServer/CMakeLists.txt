@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME}
     src/controllers/AllController.cpp
     src/controllers/DashboardController.h
     src/controllers/DashboardController.cpp
+    src/controllers/StatsController.h
+    src/controllers/StatsController.cpp
     src/controllers/RootController.h
     src/controllers/RootController.cpp
     src/dto/EntityDtos.h

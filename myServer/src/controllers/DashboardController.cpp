@@ -104,7 +104,9 @@ void DashboardController::getDashboard(const HttpRequestPtr& req,
 
     // Detections today
     db_->execSqlAsync(
-        "SELECT COUNT(*) AS count FROM events WHERE event_type='detection' AND timestamp >= date_trunc('day', now())",
+        "SELECT COUNT(*) AS count FROM events "
+        "WHERE event_type='detect_start' "
+        "AND timestamp >= date_trunc('day', now())",
         [shared, finish](const Result& r)
         {
             shared->body["detectionsToday"] = static_cast<Json::Int64>(getInt64(r, 0, "count"));
@@ -152,7 +154,8 @@ void DashboardController::getDashboard(const HttpRequestPtr& req,
     db_->execSqlAsync(
         "SELECT EXTRACT(HOUR FROM timestamp) AS hour, COUNT(*) AS count "
         "FROM events "
-        "WHERE event_type='detection' AND timestamp >= date_trunc('day', now()) "
+        "WHERE event_type='detect_start' "
+        "AND timestamp >= date_trunc('day', now()) "
         "GROUP BY 1",
         [shared, finish](const Result& r)
         {

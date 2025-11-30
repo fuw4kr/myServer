@@ -7,6 +7,9 @@
 #include <cctype>
 #include <cstdlib>
 #include <ctime>
+#include <iomanip>
+#include <optional>
+#include <sstream>
 #include <string>
 
 using namespace drogon;
@@ -59,6 +62,23 @@ int parseQueryInt(const HttpRequestPtr& req,
     {
         return defaultValue;
     }
+}
+
+std::optional<std::string> parseDateYmd(const std::string& value)
+{
+    std::tm tm{};
+    std::istringstream iss(value);
+    iss >> std::get_time(&tm, "%Y-%m-%d");
+
+    // Reject if parsing failed or extra characters remain
+    if (iss.fail() || (iss.peek() != std::char_traits<char>::eof()))
+        return std::nullopt;
+
+    char buf[11] = {};
+    if (std::strftime(buf, sizeof(buf), "%Y-%m-%d", &tm) == 0)
+        return std::nullopt;
+
+    return std::string(buf);
 }
 } // namespace
 
@@ -198,7 +218,25 @@ void StatsController::getDetectionsByHour(
 
     const std::string dateParam = req->getParameter("date");
     const bool hasDate = !dateParam.empty();
-    const std::string effectiveDate = hasDate ? dateParam : todayAsDateString();
+
+    std::optional<std::string> parsedDate;
+    if (hasDate)
+    {
+        parsedDate = parseDateYmd(dateParam);
+        if (!parsedDate)
+        {
+            auto resp = HttpResponse::newHttpJsonResponse(Json::Value("Invalid date, expected YYYY-MM-DD"));
+            resp->setStatusCode(k400BadRequest);
+            cb(resp);
+            return;
+        }
+    }
+    else
+    {
+        parsedDate = todayAsDateString();
+    }
+
+    const std::string effectiveDate = *parsedDate;
 
     auto onSuccess = [cb, effectiveDate](const Result& r)
     {

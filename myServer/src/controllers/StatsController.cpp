@@ -322,12 +322,19 @@ void StatsController::getEvents(
     const int limit = parseQueryInt(req, "limit", 100, 1, 500);
     const int offset = parseQueryInt(req, "offset", 0, 0, 1000000);
 
-    db_->execSqlAsync(
+    // Build query string with validated numeric limit/offset to avoid driver serialization issues.
+    const std::string sql =
         "SELECT e.timestamp, e.event_type, e.camera_id, COALESCE(c.name, '') AS camera_name "
         "FROM events e "
         "LEFT JOIN cameras c ON e.camera_id = c.id "
         "ORDER BY e.timestamp DESC "
-        "LIMIT $1 OFFSET $2",
+        "LIMIT " +
+        std::to_string(limit) +
+        " OFFSET " +
+        std::to_string(offset);
+
+    db_->execSqlAsync(
+        sql,
         [cb, limit, offset](const Result& r)
         {
             Json::Value events(Json::arrayValue);
@@ -368,9 +375,7 @@ void StatsController::getEvents(
             auto resp = HttpResponse::newHttpJsonResponse(Json::Value(message));
             resp->setStatusCode(k500InternalServerError);
             cb(resp);
-        },
-        limit,
-        offset);
+        });
 }
 
 bool StatsController::aiActive() const
